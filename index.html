@@ -542,6 +542,42 @@
       max-width: 720px;
     }
 
+    /* ========== MENTAL MATH PDF ========== */
+    .mental-math {
+      display: none;
+      padding: 2rem 0 3.5rem;
+    }
+
+    .mental-math.active {
+      display: block;
+    }
+
+    .pdf-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 1rem;
+    }
+
+    .pdf-card h2 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 800px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fff;
+    }
+
+    @media (max-width: 600px) {
+      .pdf-viewer {
+        height: 600px;
+      }
+    }
+
     /* ========== FOOTER ========== */
     .footer {
       background: #0f172a;
@@ -631,7 +667,7 @@
         <a href="#home" data-nav="home">Home</a>
         <a href="#howto" data-nav="howto">How to Play</a>
         <a href="#about" data-nav="about">About</a>
-        <a href="learn-secrets-of-mental-math.pdf" target="_blank">Learn Mental Math</a>
+        <a href="#mental-math" data-nav="mental-math">Learn Mental Math</a>
       </nav>
     </div>
   </header>
@@ -782,6 +818,21 @@
         </p>
       </div>
     </section>
+
+    <!-- ========== MENTAL MATH ========== -->
+    <section class="mental-math" id="mental-math" aria-labelledby="mental-math-title">
+      <div class="container">
+        <div class="pdf-card">
+          <h2 id="mental-math-title">Learn Secrets of Mental Math</h2>
+
+          <iframe
+            class="pdf-viewer"
+            src="learn-secrets-of-mental-math.pdf"
+            title="Learn Secrets of Mental Math PDF">
+          </iframe>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="footer">
@@ -813,6 +864,7 @@
     const resultsScreen = document.getElementById('results-screen');
     const howtoSection = document.getElementById('howto');
     const aboutSection = document.getElementById('about');
+    const mentalMathSection = document.getElementById('mental-math');
 
     const startQuizBtn = document.getElementById('start-quiz-btn');
     const questionCounter = document.getElementById('question-counter');
@@ -893,16 +945,24 @@
       featuresSection.classList.add('hidden');
       quizScreen.classList.remove('active');
       resultsScreen.classList.remove('active');
+      mentalMathSection.classList.remove('active');
+      howtoSection.classList.add('hidden');
+      aboutSection.classList.add('hidden');
 
       if (view === 'home') {
         homeSection.classList.remove('hidden');
         featuresSection.classList.remove('hidden');
+        howtoSection.classList.remove('hidden');
+        aboutSection.classList.remove('hidden');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (view === 'quiz') {
         quizScreen.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else if (view === 'results') {
         resultsScreen.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else if (view === 'mental-math') {
+        mentalMathSection.classList.add('active');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     }
@@ -1081,8 +1141,25 @@
           e.preventDefault();
           stopTimer();
           showView('home');
+        } else if (target === 'mental-math') {
+          e.preventDefault();
+          stopTimer();
+          showView('mental-math');
+        } else if (target === 'howto') {
+          e.preventDefault();
+          stopTimer();
+          showView('home');
+          setTimeout(() => {
+            howtoSection.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
+        } else if (target === 'about') {
+          e.preventDefault();
+          stopTimer();
+          showView('home');
+          setTimeout(() => {
+            aboutSection.scrollIntoView({ behavior: 'smooth' });
+          }, 50);
         }
-        // howto and about are native anchor scrolls – leave them
       });
     });
 
