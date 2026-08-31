@@ -1,0 +1,377 @@
+:root {
+  --bg: #f4f1ea;
+  --bg-panel: #fffdf8;
+  --ink: #1c1914;
+  --muted: #5c564c;
+  --line: #ddd4c4;
+  --accent: #0f6b5c;
+  --accent-ink: #ffffff;
+  --good: #157a3a;
+  --bad: #b42318;
+  --warn: #b45309;
+  --focus: #0b57d0;
+  --shadow: 0 10px 30px rgba(28, 25, 20, 0.08);
+  --radius: 16px;
+  --space: 1rem;
+}
+
+[data-theme="dark"] {
+  --bg: #121417;
+  --bg-panel: #1b1f24;
+  --ink: #eef2f6;
+  --muted: #a8b0b8;
+  --line: #2c333b;
+  --accent: #3dd6c0;
+  --accent-ink: #10211e;
+  --good: #4ade80;
+  --bad: #fb7185;
+  --warn: #fbbf24;
+  --focus: #93c5fd;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  line-height: 1.45;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.5rem 0.75rem;
+  z-index: 10;
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+.topbar,
+main,
+footer {
+  width: min(720px, calc(100% - 1.5rem));
+  margin-inline: auto;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.25rem 0 0.75rem;
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.tagline,
+.daily,
+.hint,
+footer p,
+.misses,
+.timer-meta,
+.mode-badge {
+  color: var(--muted);
+}
+
+.top-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+}
+
+.theme-wrap {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.15rem;
+  margin-bottom: 1rem;
+}
+
+.choice-group {
+  border: 0;
+  margin: 0 0 1rem;
+  padding: 0;
+}
+
+.choice-group legend,
+label {
+  font-weight: 650;
+}
+
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.55rem 0.8rem;
+  min-height: 44px;
+  font-weight: 550;
+  background: transparent;
+}
+
+.chip:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+.custom-range {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.custom-range input,
+select,
+#answer-input {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--ink);
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+}
+
+.hint {
+  grid-column: 1 / -1;
+  margin: 0;
+  min-height: 1.2em;
+  color: var(--bad);
+}
+
+.primary-btn,
+.ghost-btn {
+  min-height: 44px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+}
+
+.primary-btn {
+  background: var(--accent);
+  color: var(--accent-ink);
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.ghost-btn {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.play-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.status-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.45rem 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.stat,
+.mode-badge {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.streak {
+  font-weight: 750;
+}
+
+.streak.is-milestone {
+  color: var(--warn);
+}
+
+.timer-wrap {
+  margin-bottom: 0.85rem;
+}
+
+.timer-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  margin-bottom: 0.3rem;
+}
+
+.progress {
+  height: 10px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 100%;
+  background: var(--accent);
+  transform-origin: left center;
+  transform: scaleX(1);
+}
+
+.progress.is-urgent .progress-fill {
+  background: var(--bad);
+}
+
+.problem {
+  margin: 0.4rem 0 0.9rem;
+  text-align: center;
+  font-size: clamp(2.1rem, 9vw, 4.1rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1.1;
+}
+
+.answer-form label {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.answer-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+#answer-input {
+  font-size: 1.25rem;
+}
+
+.feedback {
+  min-height: 2rem;
+  margin-top: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-weight: 700;
+}
+
+.feedback[data-state="correct"] {
+  color: var(--good);
+}
+
+.feedback[data-state="incorrect"] {
+  color: var(--bad);
+}
+
+.feedback[data-state="incorrect"] #problem,
+.problem.is-shake {
+  animation: shake 280ms ease;
+}
+
+.feedback-mark {
+  font-size: 1.2rem;
+}
+
+.stats-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.4rem 0 0;
+}
+
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--line);
+  padding: 0.45rem 0;
+}
+
+footer {
+  padding: 0.5rem 0 1.5rem;
+  font-size: 0.9rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+  .status-row {
+    grid-template-columns: repeat(4, auto);
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .answer-row {
+    grid-template-columns: 1fr 160px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progress-fill,
+  .feedback[data-state="incorrect"] #problem,
+  .problem.is-shake {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@keyframes shake {
+  20% { transform: translateX(-5px); }
+  40% { transform: translateX(5px); }
+  60% { transform: translateX(-3px); }
+  80% { transform: translateX(3px); }
+}
