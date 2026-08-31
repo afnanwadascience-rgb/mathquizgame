@@ -6,13 +6,7 @@
   <title>Math Quiz Game — Mental Math Practice</title>
   <meta name="description" content="Practice mental math with addition, subtraction, multiplication, and division. Choose difficulty, timed or endless mode, and track streaks and accuracy." />
   <meta name="theme-color" content="#0f172a" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Math Quiz Game — Mental Math Practice" />
-  <meta property="og:description" content="A fast mental-math practice game with difficulty levels, timed and endless modes, streaks, and operation stats." />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Math Quiz Game — Mental Math Practice" />
-  <meta name="twitter:description" content="Practice mental math with timed or endless rounds. Track streaks and accuracy by operation." />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="style.css" />
   <script>
     (function () {
       try {
@@ -26,16 +20,6 @@
         document.documentElement.setAttribute("data-theme", "light");
       }
     })();
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Math Quiz Game",
-    "applicationCategory": "EducationalApplication",
-    "operatingSystem": "Any",
-    "description": "Browser-based mental math practice with addition, subtraction, multiplication, and division."
-  }
   </script>
 </head>
 <body>
@@ -62,6 +46,7 @@
   <main id="main">
     <section id="setup-screen" class="panel" aria-labelledby="setup-title">
       <h2 id="setup-title">Game setup</h2>
+      <p class="lede">Choose a difficulty, operation, and mode, then start. Timed rounds use a countdown. Endless mode ends after 3 misses.</p>
 
       <fieldset class="choice-group">
         <legend>Difficulty</legend>
@@ -124,7 +109,6 @@
       </div>
 
       <p class="misses" id="misses-label" hidden>Misses: 0 / 3</p>
-
       <p class="problem" id="problem" aria-live="polite">0 + 0</p>
       <p class="sr-only" id="feedback-live" aria-live="assertive"></p>
 
