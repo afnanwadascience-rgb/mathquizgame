@@ -7,8 +7,35 @@
   <meta name="description" content="Learn math step by step with lessons, a daily challenge, score, and streak." />
   <link rel="stylesheet" href="style.css" />
   <script>document.documentElement.setAttribute("data-theme", "light");</script>
+  <style>
+    #welcome-screen { display: flex; }
+    #learn-app { display: none; }
+    body.is-learning #welcome-screen { display: none !important; }
+    body.is-learning #learn-app { display: block !important; }
+  </style>
+  <script>
+    function startMathJourney() {
+      try {
+        if (window.MQGLearn && window.MQGLearn.startJourney) {
+          window.MQGLearn.startJourney();
+        } else {
+          var raw = localStorage.getItem("mqg-learn");
+          var state = raw ? JSON.parse(raw) : {};
+          state.started = true;
+          localStorage.setItem("mqg-learn", JSON.stringify(state));
+        }
+      } catch (e) {}
+      document.body.classList.add("is-learning");
+      var welcome = document.getElementById("welcome-screen");
+      var app = document.getElementById("learn-app");
+      if (welcome) welcome.style.display = "none";
+      if (app) app.style.display = "block";
+      if (window.MQGLearnRender) window.MQGLearnRender();
+      return false;
+    }
+  </script>
 </head>
-<body class="learn-page welcome-active">
+<body class="learn-page">
   <header class="site-header">
     <div class="site-header-inner">
       <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
@@ -30,12 +57,12 @@
       <p class="welcome-brand">Math <span>Quiz</span></p>
       <h1>Start Your Math Journey</h1>
       <p class="welcome-copy">Build your skills step by step with practice, challenges, and guided lessons.</p>
-      <button type="button" class="primary-btn welcome-btn" id="start-learning">Start Your Math Journey</button>
+      <button type="button" class="primary-btn welcome-btn" id="start-learning" onclick="startMathJourney(); return false;">Start Your Math Journey</button>
       <p class="welcome-kicker">Learn • Practice • Improve</p>
     </div>
   </section>
 
-  <main id="learn-app" class="page-wrap" hidden>
+  <main id="learn-app" class="page-wrap">
     <section class="panel">
       <h1 id="learn-heading">Continue Learning</h1>
       <p class="lede" id="learn-copy">Pick up where you left off. Your score and streak stay on this device.</p>
@@ -99,44 +126,12 @@
   <script src="learn.js"></script>
   <script>
     (function () {
-      function openTraining() {
-        try {
-          if (window.MQGLearn && window.MQGLearn.startJourney) {
-            window.MQGLearn.startJourney();
-          }
-        } catch (e) {}
-        var welcome = document.getElementById("welcome-screen");
-        var app = document.getElementById("learn-app");
-        if (welcome) {
-          welcome.hidden = true;
-          welcome.setAttribute("hidden", "");
-          welcome.style.display = "none";
-        }
-        if (app) {
-          app.hidden = false;
-          app.removeAttribute("hidden");
-          app.style.display = "block";
-        }
-        document.body.classList.remove("welcome-active");
-        if (window.MQGLearnRender) window.MQGLearnRender();
-      }
-
-      window.MQGLearnStart = openTraining;
-
-      var btn = document.getElementById("start-learning");
-      if (btn) {
-        btn.type = "button";
-        btn.addEventListener("click", function (event) {
-          event.preventDefault();
-          event.stopPropagation();
-          openTraining();
-        });
-      }
-
       try {
-        var state = window.MQGLearn && window.MQGLearn.load && window.MQGLearn.load();
-        if (state && (state.started || (state.completedLessons && state.completedLessons.length))) {
-          openTraining();
+        var raw = localStorage.getItem("mqg-learn");
+        var state = raw ? JSON.parse(raw) : {};
+        if (state.started || (state.completedLessons && state.completedLessons.length)) {
+          document.body.classList.add("is-learning");
+          if (window.MQGLearnRender) window.MQGLearnRender();
         }
       } catch (e) {}
     })();
