@@ -2,41 +2,486 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Learn Math — Math Quiz</title>
 
   <meta
     name="description"
-    content="Learn math step by step with lessons, a daily challenge, score, and streak."
-  />
-
-  <link rel="stylesheet" href="style.css" />
+    content="Learn math step by step with lessons, practice, daily challenges, score, and streaks."
+  >
 
   <style>
-    /*
-     * Welcome screen is visible initially.
-     * Learning app is hidden initially.
-     */
-    #welcome-screen {
-      display: flex;
+    * {
+      box-sizing: border-box;
     }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f6f7fb;
+      color: #171923;
+      line-height: 1.6;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .site-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .site-header-inner {
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .wordmark {
+      text-decoration: none;
+      color: #111827;
+      font-weight: 800;
+      font-size: 1.3rem;
+      white-space: nowrap;
+    }
+
+    .wordmark span {
+      color: #4f46e5;
+    }
+
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .site-nav a {
+      text-decoration: none;
+      color: #4b5563;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .site-nav a:hover {
+      color: #4f46e5;
+    }
+
+    /* =========================
+       WELCOME SCREEN
+       ========================= */
+
+    #welcome-screen {
+      min-height: calc(100vh - 70px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(
+          circle at 20% 20%,
+          rgba(99, 102, 241, 0.12),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 80% 70%,
+          rgba(59, 130, 246, 0.10),
+          transparent 30%
+        ),
+        #f8faff;
+    }
+
+    .welcome-inner {
+      width: min(760px, calc(100% - 32px));
+      text-align: center;
+      position: relative;
+      z-index: 2;
+      padding: 80px 20px;
+    }
+
+    .welcome-brand {
+      font-size: 1.2rem;
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+
+    .welcome-brand span {
+      color: #4f46e5;
+    }
+
+    .welcome-inner h1 {
+      margin: 0;
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .welcome-copy {
+      max-width: 620px;
+      margin: 24px auto;
+      color: #5b6472;
+      font-size: 1.1rem;
+    }
+
+    .welcome-kicker {
+      margin-top: 22px;
+      color: #6b7280;
+      font-weight: 700;
+    }
+
+    .welcome-math {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .welcome-math span {
+      position: absolute;
+      font-weight: 800;
+      font-size: clamp(2rem, 5vw, 4rem);
+      color: rgba(79, 70, 229, 0.08);
+    }
+
+    .welcome-math span:nth-child(1) {
+      top: 12%;
+      left: 8%;
+    }
+
+    .welcome-math span:nth-child(2) {
+      top: 20%;
+      right: 10%;
+    }
+
+    .welcome-math span:nth-child(3) {
+      bottom: 18%;
+      left: 12%;
+    }
+
+    .welcome-math span:nth-child(4) {
+      bottom: 12%;
+      right: 15%;
+    }
+
+    .welcome-math span:nth-child(5) {
+      top: 48%;
+      left: 4%;
+    }
+
+    .welcome-math span:nth-child(6) {
+      top: 10%;
+      right: 35%;
+    }
+
+    .welcome-math span:nth-child(7) {
+      bottom: 30%;
+      right: 5%;
+    }
+
+    .welcome-math span:nth-child(8) {
+      top: 42%;
+      right: 16%;
+    }
+
+    .welcome-math span:nth-child(9) {
+      bottom: 8%;
+      left: 40%;
+    }
+
+    .welcome-math span:nth-child(10) {
+      top: 25%;
+      left: 25%;
+    }
+
+    .primary-btn,
+    .ghost-btn {
+      border: 0;
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 750;
+      transition:
+        transform 0.15s ease,
+        box-shadow 0.15s ease,
+        opacity 0.15s ease;
+    }
+
+    .primary-btn {
+      background: #4f46e5;
+      color: #ffffff;
+      box-shadow:
+        0 8px 20px rgba(79, 70, 229, 0.22);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 10px 24px rgba(79, 70, 229, 0.28);
+    }
+
+    .primary-btn:active,
+    .ghost-btn:active {
+      transform: translateY(0);
+    }
+
+    .welcome-btn {
+      font-size: 1.05rem;
+      padding: 15px 28px;
+      margin-top: 8px;
+    }
+
+    .ghost-btn {
+      background: #ffffff;
+      color: #374151;
+      border: 1px solid #d1d5db;
+    }
+
+    .ghost-btn:hover {
+      background: #f9fafb;
+    }
+
+    /* =========================
+       APP
+       ========================= */
 
     #learn-app {
-      display: none;
+      width: min(1100px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 45px 0 80px;
     }
 
-    /*
-     * When the learning journey starts,
-     * hide the welcome screen and show the app.
-     */
-    body.is-learning #welcome-screen {
+    #learn-app[hidden] {
       display: none !important;
     }
 
-    body.is-learning #learn-app {
-      display: block !important;
+    .panel {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 26px;
+      margin-bottom: 24px;
+      box-shadow:
+        0 8px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    .panel h1,
+    .panel h2 {
+      margin-top: 0;
+    }
+
+    .lede {
+      color: #667085;
+    }
+
+    .continue-card {
+      margin: 18px 0;
+      padding: 14px 16px;
+      background: #f3f4ff;
+      border-radius: 10px;
+      color: #3730a3;
+      font-weight: 700;
+    }
+
+    /* =========================
+       STATS
+       ========================= */
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .stat-card h2 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #667085;
+      font-weight: 700;
+    }
+
+    .stat-card p {
+      margin: 7px 0 0;
+      font-size: 1.7rem;
+      font-weight: 850;
+    }
+
+    /* =========================
+       LESSONS
+       ========================= */
+
+    #lesson-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .lesson-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow:
+        0 5px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .lesson-card h3 {
+      margin-top: 0;
+      margin-bottom: 8px;
+    }
+
+    .lesson-card .primary-btn {
+      margin-top: 8px;
+    }
+
+    /* =========================
+       FORMS
+       ========================= */
+
+    .answer-form label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .answer-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .answer-row input {
+      flex: 1;
+      min-width: 0;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      padding: 12px 14px;
+      outline: none;
+    }
+
+    .answer-row input:focus {
+      border-color: #4f46e5;
+      box-shadow:
+        0 0 0 3px rgba(79, 70, 229, 0.12);
+    }
+
+    .problem {
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      font-weight: 850;
+      text-align: center;
+      margin: 28px 0;
+      letter-spacing: -0.03em;
+    }
+
+    .feedback {
+      min-height: 28px;
+      margin: 15px 0;
+      font-weight: 750;
+    }
+
+    .feedback[data-state="correct"] {
+      color: #15803d;
+    }
+
+    .feedback[data-state="incorrect"] {
+      color: #b91c1c;
+    }
+
+    /* =========================
+       ACHIEVEMENTS
+       ========================= */
+
+    .stats-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .stats-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      padding: 12px 14px;
+      background: #f9fafb;
+      border-radius: 10px;
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 800px) {
+      .site-header-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 14px 0;
+      }
+
+      .site-nav {
+        justify-content: flex-start;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      #lesson-list {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .site-nav {
+        gap: 10px 14px;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .answer-row {
+        flex-direction: column;
+      }
+
+      .welcome-inner {
+        padding: 60px 10px;
+      }
     }
   </style>
 </head>
@@ -46,6 +491,7 @@
   <!-- =========================
        HEADER
        ========================= -->
+
   <header class="site-header">
     <div class="site-header-inner">
 
@@ -65,17 +511,12 @@
 
 
   <!-- =========================
-       WELCOME SCREEN
+       WELCOME
        ========================= -->
-  <section
-    id="welcome-screen"
-    class="welcome-screen"
-  >
 
-    <div
-      class="welcome-math"
-      aria-hidden="true"
-    >
+  <section id="welcome-screen">
+
+    <div class="welcome-math" aria-hidden="true">
       <span>+</span>
       <span>÷</span>
       <span>π</span>
@@ -103,12 +544,6 @@
         practice, challenges, and guided lessons.
       </p>
 
-      <!--
-        IMPORTANT:
-        No inline onclick is used here.
-        The JavaScript at the bottom of this
-        page attaches the click event safely.
-      -->
       <button
         type="button"
         class="primary-btn welcome-btn"
@@ -122,37 +557,35 @@
       </p>
 
     </div>
+
   </section>
 
 
   <!-- =========================
-       MAIN LEARNING APP
+       LEARNING APP
        ========================= -->
-  <main
-    id="learn-app"
-    class="page-wrap"
-    hidden
-  >
 
-    <!-- Continue Learning -->
+  <main id="learn-app" hidden>
+
+    <!-- Continue -->
+
     <section class="panel">
 
-      <h1 id="learn-heading">
+      <h1>
         Continue Learning
       </h1>
 
-      <p
-        class="lede"
-        id="learn-copy"
-      >
+      <p class="lede">
         Pick up where you left off.
-        Your score and streak stay on this device.
+        Your score and progress are saved on this device.
       </p>
 
       <p
         class="continue-card"
         id="continue-card"
-      ></p>
+      >
+        Addition · Progress: 0%
+      </p>
 
       <button
         type="button"
@@ -165,12 +598,11 @@
     </section>
 
 
-    <!-- =========================
-         LEARNING STATS
-         ========================= -->
+    <!-- Stats -->
+
     <section
       class="stats-grid"
-      aria-label="Learning stats"
+      aria-label="Learning statistics"
     >
 
       <article class="stat-card">
@@ -206,9 +638,8 @@
     </section>
 
 
-    <!-- =========================
-         DAILY CHALLENGE
-         ========================= -->
+    <!-- Daily Challenge -->
+
     <section
       class="panel"
       id="challenge-panel"
@@ -251,11 +682,11 @@
             type="text"
             inputmode="decimal"
             autocomplete="off"
-          />
+          >
 
           <button
-            class="primary-btn"
             type="submit"
+            class="primary-btn"
           >
             Submit
           </button>
@@ -280,13 +711,12 @@
     </section>
 
 
-    <!-- =========================
-         LEARNING JOURNEY
-         ========================= -->
+    <!-- Lessons -->
+
     <section>
 
       <h2>
-        Learning journey
+        Learning Journey
       </h2>
 
       <div id="lesson-list"></div>
@@ -294,9 +724,8 @@
     </section>
 
 
-    <!-- =========================
-         LESSON PRACTICE
-         ========================= -->
+    <!-- Practice -->
+
     <section
       class="panel"
       id="lesson-practice"
@@ -304,13 +733,15 @@
     >
 
       <h2 id="lesson-practice-title">
-        Lesson practice
+        Lesson Practice
       </h2>
 
       <p
         class="lede"
         id="lesson-practice-meta"
-      ></p>
+      >
+        Question 1 / 5
+      </p>
 
       <p
         class="problem"
@@ -335,11 +766,11 @@
             type="text"
             inputmode="decimal"
             autocomplete="off"
-          />
+          >
 
           <button
-            class="primary-btn"
             type="submit"
+            class="primary-btn"
           >
             Submit
           </button>
@@ -364,9 +795,8 @@
     </section>
 
 
-    <!-- =========================
-         ACHIEVEMENTS
-         ========================= -->
+    <!-- Achievements -->
+
     <section class="panel">
 
       <h2>
@@ -381,9 +811,8 @@
     </section>
 
 
-    <!-- =========================
-         PDF LEARNING
-         ========================= -->
+    <!-- PDFs -->
+
     <p class="lede">
       <a href="pdfs.html">
         Math Learning PDFs
@@ -394,271 +823,1609 @@
 
 
   <!-- =========================
-       DATA / APP SCRIPTS
+       SELF-CONTAINED APPLICATION
        ========================= -->
 
-  <!-- Must load first -->
-  <script src="learn-store.js"></script>
-
-  <!-- Main learning functionality -->
-  <script src="learn.js"></script>
-
-
-  <!-- =========================
-       START JOURNEY CONTROLLER
-       ========================= -->
   <script>
     (function () {
       "use strict";
 
-      var startButton =
-        document.getElementById("start-learning");
-
-      var welcomeScreen =
-        document.getElementById("welcome-screen");
-
-      var learnApp =
-        document.getElementById("learn-app");
-
-
       /*
-       * Show the actual learning application.
+       * =====================================================
+       * MATH QUIZ LEARN
+       * Completely self-contained.
+       *
+       * This page does NOT require:
+       * - learn.js
+       * - learn-store.js
+       *
+       * Everything is handled here.
+       * =====================================================
        */
-      function showLearningApp() {
 
-        if (!welcomeScreen || !learnApp) {
-          console.error(
-            "Learn Math: required page elements were not found."
-          );
-          return;
+      var STORAGE_KEY = "mqg-learn";
+
+      var LESSONS = [
+        {
+          id: "addition",
+          title: "Addition",
+          description:
+            "Add whole numbers quickly and accurately.",
+          difficulty: "Easy",
+          ops: ["+"]
+        },
+        {
+          id: "subtraction",
+          title: "Subtraction",
+          description:
+            "Subtract whole numbers, including negative results.",
+          difficulty: "Easy",
+          ops: ["-"]
+        },
+        {
+          id: "multiplication",
+          title: "Multiplication",
+          description:
+            "Build fluency with multiplication facts.",
+          difficulty: "Medium",
+          ops: ["*"]
+        },
+        {
+          id: "division",
+          title: "Division",
+          description:
+            "Practice whole-number division.",
+          difficulty: "Medium",
+          ops: ["/"]
+        },
+        {
+          id: "fractions",
+          title: "Fractions",
+          description:
+            "Practice simple fraction-related calculations.",
+          difficulty: "Medium",
+          ops: ["/", "*"]
+        },
+        {
+          id: "percentages",
+          title: "Percentages",
+          description:
+            "Connect percentages to multiplication and division.",
+          difficulty: "Medium",
+          ops: ["*", "/"]
+        },
+        {
+          id: "mental-math",
+          title: "Mental Math",
+          description:
+            "Mixed short problems to build speed.",
+          difficulty: "Medium",
+          ops: ["+", "-", "*", "/"]
+        },
+        {
+          id: "algebra",
+          title: "Algebra Basics",
+          description:
+            "Practice simple missing-number equations.",
+          difficulty: "Hard",
+          ops: ["+", "-", "*"]
+        },
+        {
+          id: "geometry",
+          title: "Geometry Basics",
+          description:
+            "Practice perimeter-style addition and area-style multiplication.",
+          difficulty: "Hard",
+          ops: ["+", "*"]
+        },
+        {
+          id: "advanced",
+          title: "Advanced Practice",
+          description:
+            "Larger mixed problems for a tougher round.",
+          difficulty: "Hard",
+          ops: ["+", "-", "*", "/"]
         }
+      ];
 
-        /*
-         * Add application state class.
-         */
-        document.body.classList.add(
-          "is-learning"
-        );
 
-        /*
-         * Hide welcome screen.
-         */
-        welcomeScreen.hidden = true;
-        welcomeScreen.style.display = "none";
-
-        /*
-         * Show learning application.
-         */
-        learnApp.hidden = false;
-        learnApp.style.display = "block";
-
-        /*
-         * Refresh stats and lessons.
-         */
-        if (
-          typeof window.MQGLearnRender ===
-          "function"
-        ) {
-          try {
-            window.MQGLearnRender();
-          } catch (error) {
-            console.error(
-              "MQGLearnRender error:",
-              error
-            );
+      var ACHIEVEMENTS = [
+        {
+          id: "first-lesson",
+          title: "First Lesson",
+          test: function (state) {
+            return state.completedLessons.length >= 1;
+          }
+        },
+        {
+          id: "streak-3",
+          title: "3 Day Streak",
+          test: function (state) {
+            return state.streak >= 3;
+          }
+        },
+        {
+          id: "lessons-10",
+          title: "10 Lessons Completed",
+          test: function (state) {
+            return state.completedLessons.length >= 10;
+          }
+        },
+        {
+          id: "correct-50",
+          title: "50 Correct Answers",
+          test: function (state) {
+            return state.correctAnswers >= 50;
+          }
+        },
+        {
+          id: "streak-7",
+          title: "7 Day Streak",
+          test: function (state) {
+            return state.streak >= 7;
           }
         }
+      ];
 
-        /*
-         * Move the user to the learning section.
-         */
-        try {
-          learnApp.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        } catch (error) {
-          learnApp.scrollIntoView();
-        }
+
+      var practice = {
+        active: false,
+        lesson: null,
+        index: 0,
+        correct: 0,
+        question: null,
+        total: 5
+      };
+
+
+      var challenge = {
+        active: false,
+        index: 0,
+        correct: 0,
+        question: null,
+        total: 5
+      };
+
+
+      /* =====================================================
+         HELPERS
+         ===================================================== */
+
+      function $(id) {
+        return document.getElementById(id);
       }
 
 
-      /*
-       * Start the Math Learning Journey.
-       */
-      function startMathJourney(event) {
+      function today() {
+        var date = new Date();
 
-        if (event) {
-          event.preventDefault();
-        }
-
-        /*
-         * Tell learn-store.js that the journey
-         * has started.
-         */
-        try {
-
-          if (
-            window.MQGLearn &&
-            typeof window.MQGLearn.startJourney ===
-              "function"
-          ) {
-
-            window.MQGLearn.startJourney();
-
-          } else {
-
-            /*
-             * Fallback if learn-store.js is unavailable.
-             */
-            var raw =
-              localStorage.getItem(
-                "mqg-learn"
-              );
-
-            var state = {};
-
-            try {
-              state = raw
-                ? JSON.parse(raw)
-                : {};
-            } catch (error) {
-              state = {};
-            }
-
-            state.started = true;
-
-            if (!state.currentLesson) {
-              state.currentLesson =
-                "addition";
-            }
-
-            localStorage.setItem(
-              "mqg-learn",
-              JSON.stringify(state)
-            );
-          }
-
-        } catch (error) {
-
-          console.error(
-            "Unable to start Math Journey:",
-            error
-          );
-
-        }
-
-        /*
-         * Finally switch screens.
-         */
-        showLearningApp();
-
+        return (
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1).padStart(2, "0") +
+          "-" +
+          String(date.getDate()).padStart(2, "0")
+        );
       }
 
 
-      /*
-       * Attach the button listener.
-       */
-      function initializeStartButton() {
+      function yesterday() {
+        var date = new Date();
 
-        if (!startButton) {
-
-          console.error(
-            "Start Your Math Journey button was not found."
-          );
-
-          return;
-        }
-
-        /*
-         * Prevent duplicate handlers.
-         */
-        startButton.onclick = null;
-
-        startButton.addEventListener(
-          "click",
-          startMathJourney
+        date.setDate(
+          date.getDate() - 1
         );
 
+        return (
+          date.getFullYear() +
+          "-" +
+          String(date.getMonth() + 1).padStart(2, "0") +
+          "-" +
+          String(date.getDate()).padStart(2, "0")
+        );
       }
 
 
-      /*
-       * Check whether the user has already started.
-       */
-      function restorePreviousJourney() {
+      function defaultState() {
+        return {
+          started: false,
+          score: 0,
+          streak: 0,
+          lastLearningDate: null,
+          completedLessons: [],
+          lessonProgress: {},
+          currentLesson: null,
+          correctAnswers: 0,
+          dailyGoal: 0,
+          dailyGoalDate: today(),
+          dailyGoalTarget: 5,
+          dailyChallengeDate: today(),
+          dailyChallengeCorrect: 0,
+          dailyChallengeDone: false,
+          unlockedAchievements: []
+        };
+      }
+
+
+      function loadState() {
+        var state = defaultState();
 
         try {
-
           var raw =
             localStorage.getItem(
-              "mqg-learn"
+              STORAGE_KEY
             );
 
-          if (!raw) {
+          if (raw) {
+            var saved =
+              JSON.parse(raw);
+
+            if (
+              saved &&
+              typeof saved === "object"
+            ) {
+              Object.keys(saved).forEach(
+                function (key) {
+                  state[key] =
+                    saved[key];
+                }
+              );
+            }
+          }
+        } catch (error) {
+          console.warn(
+            "Could not load saved progress.",
+            error
+          );
+        }
+
+
+        if (
+          !Array.isArray(
+            state.completedLessons
+          )
+        ) {
+          state.completedLessons = [];
+        }
+
+
+        if (
+          !state.lessonProgress ||
+          typeof state.lessonProgress !== "object"
+        ) {
+          state.lessonProgress = {};
+        }
+
+
+        if (
+          !Array.isArray(
+            state.unlockedAchievements
+          )
+        ) {
+          state.unlockedAchievements = [];
+        }
+
+
+        if (
+          state.dailyGoalDate !==
+          today()
+        ) {
+          state.dailyGoal = 0;
+          state.dailyGoalDate =
+            today();
+        }
+
+
+        if (
+          state.dailyChallengeDate !==
+          today()
+        ) {
+          state.dailyChallengeDate =
+            today();
+
+          state.dailyChallengeCorrect =
+            0;
+
+          state.dailyChallengeDone =
+            false;
+        }
+
+
+        return state;
+      }
+
+
+      function saveState(state) {
+        try {
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(state)
+          );
+        } catch (error) {
+          console.warn(
+            "Could not save progress.",
+            error
+          );
+        }
+
+        return state;
+      }
+
+
+      function updateStreak(state) {
+        var current = today();
+
+        if (
+          state.lastLearningDate ===
+          current
+        ) {
+          return;
+        }
+
+
+        if (
+          state.lastLearningDate ===
+          yesterday()
+        ) {
+          state.streak =
+            Number(state.streak || 0) +
+            1;
+        } else {
+          state.streak = 1;
+        }
+
+
+        state.lastLearningDate =
+          current;
+      }
+
+
+      function updateAchievements(state) {
+        ACHIEVEMENTS.forEach(
+          function (achievement) {
+
+            var alreadyUnlocked =
+              state.unlockedAchievements.indexOf(
+                achievement.id
+              ) !== -1;
+
+
+            if (
+              !alreadyUnlocked &&
+              achievement.test(state)
+            ) {
+              state.unlockedAchievements.push(
+                achievement.id
+              );
+            }
+
+          }
+        );
+      }
+
+
+      function addActivity(
+        state,
+        score,
+        goalAmount
+      ) {
+        updateStreak(state);
+
+        state.score +=
+          Number(score || 0);
+
+        state.dailyGoal =
+          Math.min(
+            state.dailyGoalTarget,
+            state.dailyGoal +
+              Number(goalAmount || 0)
+          );
+
+        updateAchievements(state);
+
+        saveState(state);
+
+        return state;
+      }
+
+
+      /* =====================================================
+         START BUTTON
+         ===================================================== */
+
+      function startJourney() {
+
+        /*
+         * This function is completely independent
+         * from learn.js and learn-store.js.
+         */
+
+        var state =
+          loadState();
+
+        state.started = true;
+
+        if (
+          !state.currentLesson
+        ) {
+          state.currentLesson =
+            LESSONS[0].id;
+        }
+
+        updateStreak(state);
+        updateAchievements(state);
+        saveState(state);
+
+
+        var welcome =
+          $("welcome-screen");
+
+        var app =
+          $("learn-app");
+
+
+        if (welcome) {
+          welcome.hidden = true;
+          welcome.style.display =
+            "none";
+        }
+
+
+        if (app) {
+          app.hidden = false;
+          app.style.display =
+            "block";
+        }
+
+
+        renderEverything();
+
+
+        if (app) {
+          try {
+            app.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+          } catch (error) {
+            app.scrollIntoView();
+          }
+        }
+
+      }
+
+
+      /* =====================================================
+         RANDOM QUESTIONS
+         ===================================================== */
+
+      function randomInt(min, max) {
+        return Math.floor(
+          Math.random() *
+            (max - min + 1)
+        ) + min;
+      }
+
+
+      function generateQuestion(
+        operations,
+        hard
+      ) {
+
+        var operation =
+          operations[
+            randomInt(
+              0,
+              operations.length - 1
+            )
+          ];
+
+
+        var max =
+          hard ? 20 : 12;
+
+
+        var a =
+          randomInt(1, max);
+
+        var b =
+          randomInt(1, max);
+
+        var answer;
+
+
+        if (operation === "+") {
+
+          answer =
+            a + b;
+
+        } else if (
+          operation === "-"
+        ) {
+
+          answer =
+            a - b;
+
+        } else if (
+          operation === "*"
+        ) {
+
+          answer =
+            a * b;
+
+        } else {
+
+          b =
+            randomInt(
+              1,
+              max
+            );
+
+          answer =
+            randomInt(
+              1,
+              10
+            );
+
+          a =
+            b * answer;
+        }
+
+
+        return {
+          text:
+            a +
+            " " +
+            operation +
+            " " +
+            b,
+
+          answer:
+            answer,
+
+          operation:
+            operation
+        };
+      }
+
+
+      function checkAnswer(
+        value,
+        question
+      ) {
+
+        var text =
+          String(value).trim();
+
+
+        if (!text) {
+          return false;
+        }
+
+
+        var number =
+          Number(text);
+
+
+        if (!Number.isFinite(number)) {
+          return false;
+        }
+
+
+        if (
+          question.operation === "/"
+        ) {
+
+          return (
+            Math.abs(
+              number -
+                question.answer
+            ) < 0.01
+          );
+
+        }
+
+
+        return (
+          number ===
+          question.answer
+        );
+      }
+
+
+      /* =====================================================
+         RENDER STATS
+         ===================================================== */
+
+      function getNextLesson(
+        state
+      ) {
+
+        for (
+          var i = 0;
+          i < LESSONS.length;
+          i++
+        ) {
+
+          if (
+            state.completedLessons.indexOf(
+              LESSONS[i].id
+            ) === -1
+          ) {
+            return LESSONS[i];
+          }
+
+        }
+
+
+        return LESSONS[
+          LESSONS.length - 1
+        ];
+      }
+
+
+      function renderStats() {
+
+        var state =
+          loadState();
+
+
+        if ($("stat-score")) {
+          $("stat-score").textContent =
+            String(state.score);
+        }
+
+
+        if ($("stat-streak")) {
+          $("stat-streak").textContent =
+            state.streak +
+            " day" +
+            (
+              state.streak === 1
+                ? ""
+                : "s"
+            );
+        }
+
+
+        var totalUnits =
+          LESSONS.length;
+
+
+        var completedUnits =
+          state.completedLessons.length;
+
+
+        var progress =
+          Math.round(
+            (
+              completedUnits /
+              totalUnits
+            ) *
+            100
+          );
+
+
+        if ($("stat-progress")) {
+          $("stat-progress").textContent =
+            progress + "%";
+        }
+
+
+        if ($("stat-lessons")) {
+          $("stat-lessons").textContent =
+            completedUnits +
+            " / " +
+            LESSONS.length;
+        }
+
+
+        var level =
+          "New learner";
+
+
+        if (
+          completedUnits >= 10
+        ) {
+          level = "Advanced";
+        } else if (
+          completedUnits >= 7
+        ) {
+          level = "Proficient";
+        } else if (
+          completedUnits >= 4
+        ) {
+          level = "Developing";
+        } else if (
+          completedUnits >= 1
+        ) {
+          level = "Beginner";
+        }
+
+
+        if ($("stat-level")) {
+          $("stat-level").textContent =
+            level;
+        }
+
+
+        if ($("stat-goal")) {
+          $("stat-goal").textContent =
+            state.dailyGoal +
+            " / " +
+            state.dailyGoalTarget;
+        }
+
+
+        var next =
+          getNextLesson(state);
+
+
+        var answered =
+          Number(
+            state.lessonProgress[
+              next.id
+            ] || 0
+          );
+
+
+        var percentage =
+          Math.round(
+            (
+              Math.min(
+                answered,
+                5
+              ) /
+              5
+            ) *
+            100
+          );
+
+
+        if ($("continue-card")) {
+          $("continue-card").textContent =
+            next.title +
+            " · Progress: " +
+            percentage +
+            "%";
+        }
+
+
+        if (
+          $("challenge-start")
+        ) {
+          $("challenge-start").hidden =
+            state.dailyChallengeDone;
+        }
+
+
+        if (
+          state.dailyChallengeDone &&
+          $("challenge-status")
+        ) {
+          $("challenge-status").textContent =
+            "Today's challenge complete · " +
+            state.dailyChallengeCorrect +
+            " / 5 correct.";
+        }
+
+      }
+
+
+      /* =====================================================
+         RENDER LESSONS
+         ===================================================== */
+
+      function renderLessons() {
+
+        var list =
+          $("lesson-list");
+
+
+        if (!list) {
+          return;
+        }
+
+
+        var state =
+          loadState();
+
+
+        list.innerHTML = "";
+
+
+        LESSONS.forEach(
+          function (lesson) {
+
+            var card =
+              document.createElement(
+                "article"
+              );
+
+            card.className =
+              "lesson-card";
+
+
+            var title =
+              document.createElement(
+                "h3"
+              );
+
+            title.textContent =
+              lesson.title;
+
+
+            var description =
+              document.createElement(
+                "p"
+              );
+
+            description.className =
+              "lede";
+
+            description.textContent =
+              lesson.description;
+
+
+            var progressText =
+              document.createElement(
+                "p"
+              );
+
+            progressText.className =
+              "lede";
+
+
+            var completed =
+              state.completedLessons.indexOf(
+                lesson.id
+              ) !== -1;
+
+
+            var answered =
+              Number(
+                state.lessonProgress[
+                  lesson.id
+                ] || 0
+              );
+
+
+            var percentage =
+              completed
+                ? 100
+                : Math.round(
+                    (
+                      Math.min(
+                        answered,
+                        5
+                      ) /
+                      5
+                    ) *
+                    100
+                  );
+
+
+            progressText.textContent =
+              "Difficulty: " +
+              lesson.difficulty +
+              " · Progress: " +
+              percentage +
+              "%";
+
+
+            var button =
+              document.createElement(
+                "button"
+              );
+
+            button.type =
+              "button";
+
+            button.className =
+              "primary-btn";
+
+            button.textContent =
+              completed
+                ? "Completed"
+                : answered
+                  ? "Continue"
+                  : "Start";
+
+
+            button.addEventListener(
+              "click",
+              function () {
+                startLesson(
+                  lesson.id
+                );
+              }
+            );
+
+
+            card.appendChild(title);
+            card.appendChild(description);
+            card.appendChild(progressText);
+            card.appendChild(button);
+
+            list.appendChild(card);
+
+          }
+        );
+
+      }
+
+
+      /* =====================================================
+         ACHIEVEMENTS
+         ===================================================== */
+
+      function renderAchievements() {
+
+        var list =
+          $("achievement-list");
+
+
+        if (!list) {
+          return;
+        }
+
+
+        var state =
+          loadState();
+
+
+        list.innerHTML = "";
+
+
+        ACHIEVEMENTS.forEach(
+          function (achievement) {
+
+            var item =
+              document.createElement(
+                "li"
+              );
+
+
+            var title =
+              document.createElement(
+                "span"
+              );
+
+            title.textContent =
+              achievement.title;
+
+
+            var status =
+              document.createElement(
+                "span"
+              );
+
+
+            var unlocked =
+              state.unlockedAchievements.indexOf(
+                achievement.id
+              ) !== -1;
+
+
+            status.textContent =
+              unlocked
+                ? "Unlocked"
+                : "Locked";
+
+
+            item.appendChild(title);
+            item.appendChild(status);
+
+            list.appendChild(item);
+
+          }
+        );
+
+      }
+
+
+      function renderEverything() {
+        renderStats();
+        renderLessons();
+        renderAchievements();
+      }
+
+
+      /* =====================================================
+         LESSON PRACTICE
+         ===================================================== */
+
+      function showPractice(
+        visible
+      ) {
+
+        var practicePanel =
+          $("lesson-practice");
+
+        var list =
+          $("lesson-list");
+
+
+        if (practicePanel) {
+          practicePanel.hidden =
+            !visible;
+        }
+
+
+        if (list) {
+          list.style.display =
+            visible
+              ? "none"
+              : "grid";
+        }
+
+      }
+
+
+      function nextPracticeQuestion() {
+
+        if (!practice.lesson) {
+          return;
+        }
+
+
+        practice.question =
+          generateQuestion(
+            practice.lesson.ops,
+            practice.lesson.difficulty ===
+              "Hard"
+          );
+
+
+        $("lesson-problem").textContent =
+          practice.question.text +
+          " =";
+
+
+        $("lesson-practice-meta").textContent =
+          "Question " +
+          (
+            practice.index + 1
+          ) +
+          " / " +
+          practice.total;
+
+
+        $("lesson-input").value =
+          "";
+
+
+        $("lesson-input").focus();
+
+      }
+
+
+      function startLesson(id) {
+
+        var lesson =
+          LESSONS.find(
+            function (item) {
+              return item.id === id;
+            }
+          );
+
+
+        if (!lesson) {
+          return;
+        }
+
+
+        var state =
+          loadState();
+
+
+        state.started =
+          true;
+
+        state.currentLesson =
+          id;
+
+        saveState(state);
+
+
+        practice.active =
+          true;
+
+        practice.lesson =
+          lesson;
+
+        practice.index =
+          0;
+
+        practice.correct =
+          0;
+
+
+        $("lesson-practice-title").textContent =
+          lesson.title;
+
+
+        $("lesson-feedback").textContent =
+          "";
+
+        $("lesson-feedback").dataset.state =
+          "";
+
+
+        showPractice(true);
+
+        nextPracticeQuestion();
+
+
+        $("lesson-practice").scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+      }
+
+
+      /* =====================================================
+         LESSON SUBMIT
+         ===================================================== */
+
+      $("lesson-form").addEventListener(
+        "submit",
+        function (event) {
+
+          event.preventDefault();
+
+
+          if (
+            !practice.active ||
+            !practice.question
+          ) {
             return;
           }
 
-          var state =
-            JSON.parse(raw);
 
-          if (
-            state &&
-            (
-              state.started === true ||
-              (
-                Array.isArray(
-                  state.completedLessons
-                ) &&
-                state.completedLessons.length > 0
-              )
-            )
-          ) {
+          var correct =
+            checkAnswer(
+              $("lesson-input").value,
+              practice.question
+            );
 
-            showLearningApp();
+
+          if (correct) {
+
+            practice.correct += 1;
+
+
+            var state =
+              loadState();
+
+
+            state.correctAnswers += 1;
+
+
+            addActivity(
+              state,
+              5,
+              0
+            );
+
 
           }
 
-        } catch (error) {
 
-          console.warn(
-            "Could not restore previous learning state:",
-            error
+          $("lesson-feedback").textContent =
+            correct
+              ? "Correct!"
+              : "Incorrect · Answer: " +
+                practice.question.answer;
+
+
+          $("lesson-feedback").dataset.state =
+            correct
+              ? "correct"
+              : "incorrect";
+
+
+          practice.index += 1;
+
+
+          var progressState =
+            loadState();
+
+
+          progressState.lessonProgress[
+            practice.lesson.id
+          ] =
+            Math.max(
+              Number(
+                progressState.lessonProgress[
+                  practice.lesson.id
+                ] || 0
+              ),
+              practice.index
+            );
+
+
+          saveState(
+            progressState
+          );
+
+
+          if (
+            practice.index >=
+            practice.total
+          ) {
+
+            if (
+              practice.correct >= 3
+            ) {
+
+              var completeState =
+                loadState();
+
+
+              if (
+                completeState.completedLessons.indexOf(
+                  practice.lesson.id
+                ) === -1
+              ) {
+
+                completeState.completedLessons.push(
+                  practice.lesson.id
+                );
+
+                completeState.lessonProgress[
+                  practice.lesson.id
+                ] = 5;
+
+                completeState.currentLesson =
+                  getNextLesson(
+                    completeState
+                  ).id;
+
+                addActivity(
+                  completeState,
+                  40,
+                  1
+                );
+
+              }
+
+            }
+
+
+            practice.active =
+              false;
+
+            practice.question =
+              null;
+
+
+            showPractice(false);
+
+            renderEverything();
+
+
+          } else {
+
+            nextPracticeQuestion();
+
+          }
+
+        }
+      );
+
+
+      /* =====================================================
+         EXIT LESSON
+         ===================================================== */
+
+      $("lesson-exit").addEventListener(
+        "click",
+        function () {
+
+          practice.active =
+            false;
+
+          practice.lesson =
+            null;
+
+          practice.question =
+            null;
+
+
+          showPractice(false);
+
+          renderEverything();
+
+        }
+      );
+
+
+      /* =====================================================
+         CONTINUE LEARNING
+         ===================================================== */
+
+      $("continue-learning").addEventListener(
+        "click",
+        function () {
+
+          var state =
+            loadState();
+
+
+          var next =
+            getNextLesson(state);
+
+
+          startLesson(
+            next.id
           );
 
         }
+      );
+
+
+      /* =====================================================
+         DAILY CHALLENGE
+         ===================================================== */
+
+      function nextChallengeQuestion() {
+
+        challenge.question =
+          generateQuestion(
+            ["+", "-", "*", "/"],
+            false
+          );
+
+
+        $("challenge-problem").textContent =
+          challenge.question.text +
+          " =";
+
+
+        $("challenge-input").value =
+          "";
+
+
+        $("challenge-status").textContent =
+          "Question " +
+          (
+            challenge.index + 1
+          ) +
+          " / " +
+          challenge.total;
+
+
+        $("challenge-input").focus();
 
       }
 
 
-      /*
-       * Initialize everything after the DOM
-       * has loaded.
-       */
+      $("challenge-start").addEventListener(
+        "click",
+        function () {
+
+          var state =
+            loadState();
+
+
+          if (
+            state.dailyChallengeDone
+          ) {
+            return;
+          }
+
+
+          challenge.active =
+            true;
+
+          challenge.index =
+            0;
+
+          challenge.correct =
+            0;
+
+
+          $("challenge-problem").hidden =
+            false;
+
+          $("challenge-form").hidden =
+            false;
+
+          $("challenge-start").hidden =
+            true;
+
+
+          $("challenge-feedback").textContent =
+            "";
+
+
+          nextChallengeQuestion();
+
+        }
+      );
+
+
+      $("challenge-form").addEventListener(
+        "submit",
+        function (event) {
+
+          event.preventDefault();
+
+
+          if (
+            !challenge.active ||
+            !challenge.question
+          ) {
+            return;
+          }
+
+
+          var correct =
+            checkAnswer(
+              $("challenge-input").value,
+              challenge.question
+            );
+
+
+          if (correct) {
+            challenge.correct += 1;
+          }
+
+
+          $("challenge-feedback").textContent =
+            correct
+              ? "Correct!"
+              : "Incorrect · Answer: " +
+                challenge.question.answer;
+
+
+          $("challenge-feedback").dataset.state =
+            correct
+              ? "correct"
+              : "incorrect";
+
+
+          challenge.index += 1;
+
+
+          if (
+            challenge.index >=
+            challenge.total
+          ) {
+
+            challenge.active =
+              false;
+
+
+            var state =
+              loadState();
+
+
+            state.dailyChallengeCorrect =
+              challenge.correct;
+
+
+            state.dailyChallengeDone =
+              true;
+
+
+            if (
+              challenge.correct > 0
+            ) {
+
+              state.correctAnswers +=
+                challenge.correct;
+
+            }
+
+
+            addActivity(
+              state,
+              challenge.correct * 8,
+              1
+            );
+
+
+            $("challenge-form").hidden =
+              true;
+
+            $("challenge-problem").hidden =
+              true;
+
+            $("challenge-start").hidden =
+              true;
+
+
+            $("challenge-status").textContent =
+              "Today's challenge complete · " +
+              challenge.correct +
+              " / 5 correct.";
+
+
+            renderEverything();
+
+
+          } else {
+
+            nextChallengeQuestion();
+
+          }
+
+        }
+      );
+
+
+      /* =====================================================
+         START BUTTON
+         ===================================================== */
+
+      $("start-learning").addEventListener(
+        "click",
+        function (event) {
+
+          event.preventDefault();
+
+          startJourney();
+
+        }
+      );
+
+
+      /* =====================================================
+         INITIAL PAGE LOAD
+         ===================================================== */
+
       function initialize() {
 
-        initializeStartButton();
+        var state =
+          loadState();
 
-        restorePreviousJourney();
+
+        /*
+         * If the user has already started,
+         * open the learning app automatically.
+         */
+        if (
+          state.started === true
+        ) {
+
+          $("welcome-screen").hidden =
+            true;
+
+          $("welcome-screen").style.display =
+            "none";
+
+          $("learn-app").hidden =
+            false;
+
+          $("learn-app").style.display =
+            "block";
+
+        } else {
+
+          $("welcome-screen").hidden =
+            false;
+
+          $("welcome-screen").style.display =
+            "flex";
+
+          $("learn-app").hidden =
+            true;
+
+          $("learn-app").style.display =
+            "none";
+
+        }
+
+
+        renderEverything();
 
       }
 
 
-      if (
-        document.readyState ===
-        "loading"
-      ) {
-
-        document.addEventListener(
-          "DOMContentLoaded",
-          initialize
-        );
-
-      } else {
-
-        initialize();
-
-      }
+      initialize();
 
     })();
   </script>
