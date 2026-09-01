@@ -2,31 +2,42 @@
   "use strict";
 
   var L = window.MQGLearn;
-  var practice = { active: false, lesson: null, index: 0, correct: 0, question: null, total: 5 };
-  var challenge = { active: false, index: 0, correct: 0, question: null, total: 5 };
+  if (!L) {
+    console.error("learn-store.js did not load");
+    return;
+  }
 
   var welcomeEl = document.getElementById("welcome-screen");
   var appEl = document.getElementById("learn-app");
+  var startBtn = document.getElementById("start-learning");
+  var continueBtn = document.getElementById("continue-learning");
+
+  var practice = { active: false, lesson: null, index: 0, correct: 0, question: null, total: 5 };
+  var challenge = { active: false, index: 0, correct: 0, question: null, total: 5 };
 
   function hasStarted() {
     var state = L.load();
-    return !!(state.started || state.completedLessons.length || state.correctAnswers);
+    return !!(state.started || (state.completedLessons && state.completedLessons.length) || state.correctAnswers);
   }
 
   function showWelcome() {
     document.body.classList.add("welcome-active");
-    welcomeEl.hidden = false;
-    appEl.hidden = true;
+    if (welcomeEl) welcomeEl.hidden = false;
+    if (appEl) appEl.hidden = true;
   }
 
   function showTraining(animate) {
     document.body.classList.remove("welcome-active");
-    welcomeEl.hidden = true;
-    appEl.hidden = false;
-    if (animate) {
-      appEl.classList.remove("learn-enter");
-      void appEl.offsetWidth;
-      appEl.classList.add("learn-enter");
+    if (welcomeEl) welcomeEl.hidden = true;
+    if (appEl) {
+      appEl.hidden = false;
+      appEl.removeAttribute("hidden");
+      appEl.style.display = "";
+      if (animate) {
+        appEl.classList.remove("learn-enter");
+        void appEl.offsetWidth;
+        appEl.classList.add("learn-enter");
+      }
     }
     renderStats();
     renderLessons();
@@ -81,9 +92,11 @@
 
     var next = L.nextLesson(state);
     var pct = Math.round(((state.lessonProgress[next.id] || 0) / 5) * 100);
-    document.getElementById("continue-card").textContent = next.title + " · Progress: " + pct + "%";
+    var card = document.getElementById("continue-card");
+    if (card) card.textContent = next.title + " · Progress: " + pct + "%";
 
-    document.getElementById("challenge-start").hidden = state.dailyChallengeDone;
+    var challengeStart = document.getElementById("challenge-start");
+    if (challengeStart) challengeStart.hidden = state.dailyChallengeDone;
     if (state.dailyChallengeDone) {
       document.getElementById("challenge-status").textContent = "Today’s challenge complete · " + state.dailyChallengeCorrect + " / 5 correct.";
     }
@@ -95,8 +108,10 @@
   }
 
   function renderLessons() {
+    var list = document.getElementById("lesson-list");
+    if (!list) return;
     var state = L.load();
-    document.getElementById("lesson-list").innerHTML = L.LESSONS.map(function (lesson) {
+    list.innerHTML = L.LESSONS.map(function (lesson) {
       var done = state.completedLessons.indexOf(lesson.id) !== -1;
       var answered = state.lessonProgress[lesson.id] || 0;
       var pct = done ? 100 : Math.round((answered / 5) * 100);
@@ -140,14 +155,19 @@
     renderStats();
   }
 
-  document.getElementById("start-learning").addEventListener("click", function () {
-    L.startJourney();
-    showTraining(true);
-  });
+  if (startBtn) {
+    startBtn.addEventListener("click", function (event) {
+      event.preventDefault();
+      L.startJourney();
+      showTraining(true);
+    });
+  }
 
-  document.getElementById("continue-learning").addEventListener("click", function () {
-    startLesson(L.nextLesson().id);
-  });
+  if (continueBtn) {
+    continueBtn.addEventListener("click", function () {
+      startLesson(L.nextLesson().id);
+    });
+  }
 
   document.getElementById("lesson-list").addEventListener("click", function (event) {
     var btn = event.target.closest("[data-lesson]");
