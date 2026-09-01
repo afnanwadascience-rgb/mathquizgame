@@ -3,138 +3,513 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>Learn Math — Math Quiz</title>
-  <meta name="description" content="Learn math step by step with lessons, a daily challenge, score, and streak." />
+  <meta
+    name="description"
+    content="Learn math step by step with lessons, a daily challenge, score, and streak."
+  />
+
   <link rel="stylesheet" href="style.css" />
-  <script>document.documentElement.setAttribute("data-theme", "light");</script>
+
   <style>
-    #welcome-screen { display: flex; }
-    #learn-app { display: none; }
-    body.is-learning #welcome-screen { display: none !important; }
-    body.is-learning #learn-app { display: block !important; }
-  </style>
-  <script>
-    function startMathJourney() {
-      try {
-        if (window.MQGLearn && window.MQGLearn.startJourney) {
-          window.MQGLearn.startJourney();
-        } else {
-          var raw = localStorage.getItem("mqg-learn");
-          var state = raw ? JSON.parse(raw) : {};
-          state.started = true;
-          localStorage.setItem("mqg-learn", JSON.stringify(state));
-        }
-      } catch (e) {}
-      document.body.classList.add("is-learning");
-      var welcome = document.getElementById("welcome-screen");
-      var app = document.getElementById("learn-app");
-      if (welcome) welcome.style.display = "none";
-      if (app) app.style.display = "block";
-      if (window.MQGLearnRender) window.MQGLearnRender();
-      return false;
+    /*
+      First-visit state:
+      Show the welcome screen and hide the learning app.
+    */
+    #welcome-screen {
+      display: flex;
     }
-  </script>
+
+    #learn-app {
+      display: none;
+    }
+
+    /*
+      After the journey starts:
+      hide welcome and show the learning app.
+    */
+    body.is-learning #welcome-screen {
+      display: none !important;
+    }
+
+    body.is-learning #learn-app {
+      display: block !important;
+    }
+
+    /*
+      Extra safety for hidden elements.
+    */
+    [hidden] {
+      display: none !important;
+    }
+  </style>
 </head>
+
 <body class="learn-page">
+
+  <!-- =========================================
+       HEADER
+  ========================================== -->
   <header class="site-header">
     <div class="site-header-inner">
-      <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
+
+      <a class="wordmark" href="index.html">
+        Math <span>Quiz</span>
+      </a>
+
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="learn.html" aria-current="page">Learn Math</a>
         <a href="how-to-play.html">How to Play</a>
         <a href="about.html">About</a>
       </nav>
+
     </div>
   </header>
 
-  <section id="welcome-screen" class="welcome-screen">
+  <!-- =========================================
+       FIRST INTERFACE / WELCOME SCREEN
+  ========================================== -->
+  <section
+    id="welcome-screen"
+    class="welcome-screen"
+    aria-labelledby="welcome-title"
+  >
+
     <div class="welcome-math" aria-hidden="true">
-      <span>+</span><span>÷</span><span>π</span><span>×</span><span>√</span>
-      <span>12</span><span>−</span><span>=</span><span>7</span><span>△</span>
+      <span>+</span>
+      <span>÷</span>
+      <span>π</span>
+      <span>×</span>
+      <span>√</span>
+      <span>12</span>
+      <span>−</span>
+      <span>=</span>
+      <span>7</span>
+      <span>△</span>
     </div>
+
     <div class="welcome-inner">
-      <p class="welcome-brand">Math <span>Quiz</span></p>
-      <h1>Start Your Math Journey</h1>
-      <p class="welcome-copy">Build your skills step by step with practice, challenges, and guided lessons.</p>
-      <button type="button" class="primary-btn welcome-btn" id="start-learning" onclick="startMathJourney(); return false;">Start Your Math Journey</button>
-      <p class="welcome-kicker">Learn • Practice • Improve</p>
+
+      <p class="welcome-brand">
+        Math <span>Quiz</span>
+      </p>
+
+      <h1 id="welcome-title">
+        Start Your Math Journey
+      </h1>
+
+      <p class="welcome-copy">
+        Build your skills step by step with practice, challenges,
+        and guided lessons.
+      </p>
+
+      <!-- IMPORTANT: no inline onclick -->
+      <button
+        type="button"
+        class="primary-btn welcome-btn"
+        id="start-learning"
+      >
+        Start Your Math Journey
+      </button>
+
+      <p class="welcome-kicker">
+        Learn • Practice • Improve
+      </p>
+
     </div>
   </section>
 
+  <!-- =========================================
+       MAIN LEARNING APPLICATION
+  ========================================== -->
   <main id="learn-app" class="page-wrap">
+
+    <!-- Continue learning -->
     <section class="panel">
-      <h1 id="learn-heading">Continue Learning</h1>
-      <p class="lede" id="learn-copy">Pick up where you left off. Your score and streak stay on this device.</p>
+
+      <h1 id="learn-heading">
+        Continue Learning
+      </h1>
+
+      <p class="lede" id="learn-copy">
+        Pick up where you left off. Your score and streak stay on this device.
+      </p>
+
       <p class="continue-card" id="continue-card"></p>
-      <button type="button" class="primary-btn" id="continue-learning">Continue Learning</button>
+
+      <button
+        type="button"
+        class="primary-btn"
+        id="continue-learning"
+      >
+        Continue Learning
+      </button>
+
     </section>
 
+    <!-- Learning statistics -->
     <section class="stats-grid" aria-label="Learning stats">
-      <article class="stat-card"><h2>Math Score</h2><p id="stat-score">0</p></article>
-      <article class="stat-card"><h2>Day Streak</h2><p id="stat-streak">0 days</p></article>
-      <article class="stat-card"><h2>Learning Progress</h2><p id="stat-progress">0%</p></article>
-      <article class="stat-card"><h2>Lessons Completed</h2><p id="stat-lessons">0 / 10</p></article>
-      <article class="stat-card"><h2>Current Level</h2><p id="stat-level">New learner</p></article>
-      <article class="stat-card"><h2>Today's Goal</h2><p id="stat-goal">0 / 5</p></article>
+
+      <article class="stat-card">
+        <h2>Math Score</h2>
+        <p id="stat-score">0</p>
+      </article>
+
+      <article class="stat-card">
+        <h2>Day Streak</h2>
+        <p id="stat-streak">0 days</p>
+      </article>
+
+      <article class="stat-card">
+        <h2>Learning Progress</h2>
+        <p id="stat-progress">0%</p>
+      </article>
+
+      <article class="stat-card">
+        <h2>Lessons Completed</h2>
+        <p id="stat-lessons">0 / 10</p>
+      </article>
+
+      <article class="stat-card">
+        <h2>Current Level</h2>
+        <p id="stat-level">New learner</p>
+      </article>
+
+      <article class="stat-card">
+        <h2>Today's Goal</h2>
+        <p id="stat-goal">0 / 5</p>
+      </article>
+
     </section>
 
+    <!-- =========================================
+         DAILY CHALLENGE
+    ========================================== -->
     <section class="panel" id="challenge-panel">
+
       <h2>Daily Math Challenge</h2>
-      <p class="lede" id="challenge-status">5 mixed questions. Completing it counts toward today’s goal.</p>
-      <p class="problem" id="challenge-problem" hidden>0 + 0</p>
-      <form id="challenge-form" class="answer-form" hidden>
-        <label for="challenge-input">Your answer</label>
+
+      <p class="lede" id="challenge-status">
+        5 mixed questions. Completing it counts toward today’s goal.
+      </p>
+
+      <p
+        class="problem"
+        id="challenge-problem"
+        hidden
+      >
+        0 + 0
+      </p>
+
+      <form
+        id="challenge-form"
+        class="answer-form"
+        hidden
+      >
+        <label for="challenge-input">
+          Your answer
+        </label>
+
         <div class="answer-row">
-          <input id="challenge-input" type="text" inputmode="decimal" autocomplete="off" />
-          <button class="primary-btn" type="submit">Submit</button>
+
+          <input
+            id="challenge-input"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+          />
+
+          <button
+            class="primary-btn"
+            type="submit"
+          >
+            Submit
+          </button>
+
         </div>
       </form>
-      <p class="feedback" id="challenge-feedback"></p>
-      <button type="button" class="ghost-btn" id="challenge-start">Start daily challenge</button>
+
+      <p
+        class="feedback"
+        id="challenge-feedback"
+      ></p>
+
+      <button
+        type="button"
+        class="ghost-btn"
+        id="challenge-start"
+      >
+        Start daily challenge
+      </button>
+
     </section>
 
+    <!-- =========================================
+         LEARNING JOURNEY
+    ========================================== -->
     <section>
+
       <h2>Learning journey</h2>
+
       <div id="lesson-list"></div>
+
     </section>
 
-    <section class="panel" id="lesson-practice" hidden>
-      <h2 id="lesson-practice-title">Lesson practice</h2>
-      <p class="lede" id="lesson-practice-meta"></p>
-      <p class="problem" id="lesson-problem">0 + 0</p>
-      <form id="lesson-form" class="answer-form">
-        <label for="lesson-input">Your answer</label>
+    <!-- =========================================
+         LESSON PRACTICE
+    ========================================== -->
+    <section
+      class="panel"
+      id="lesson-practice"
+      hidden
+    >
+
+      <h2 id="lesson-practice-title">
+        Lesson practice
+      </h2>
+
+      <p
+        class="lede"
+        id="lesson-practice-meta"
+      ></p>
+
+      <p
+        class="problem"
+        id="lesson-problem"
+      >
+        0 + 0
+      </p>
+
+      <form
+        id="lesson-form"
+        class="answer-form"
+      >
+
+        <label for="lesson-input">
+          Your answer
+        </label>
+
         <div class="answer-row">
-          <input id="lesson-input" type="text" inputmode="decimal" autocomplete="off" />
-          <button class="primary-btn" type="submit">Submit</button>
+
+          <input
+            id="lesson-input"
+            type="text"
+            inputmode="decimal"
+            autocomplete="off"
+          />
+
+          <button
+            class="primary-btn"
+            type="submit"
+          >
+            Submit
+          </button>
+
         </div>
+
       </form>
-      <p class="feedback" id="lesson-feedback"></p>
-      <button type="button" class="ghost-btn" id="lesson-exit">Back to lessons</button>
+
+      <p
+        class="feedback"
+        id="lesson-feedback"
+      ></p>
+
+      <button
+        type="button"
+        class="ghost-btn"
+        id="lesson-exit"
+      >
+        Back to lessons
+      </button>
+
     </section>
 
+    <!-- =========================================
+         ACHIEVEMENTS
+    ========================================== -->
     <section class="panel">
+
       <h2>Achievements</h2>
-      <ul class="stats-list" id="achievement-list"></ul>
+
+      <ul
+        class="stats-list"
+        id="achievement-list"
+      ></ul>
+
     </section>
 
-    <p class="lede"><a href="pdfs.html">Math Learning PDFs</a></p>
+    <!-- PDF learning -->
+    <p class="lede">
+      <a href="pdfs.html">
+        Math Learning PDFs
+      </a>
+    </p>
+
   </main>
 
+  <!-- =========================================
+       LEARNING STORE
+  ========================================== -->
   <script src="learn-store.js"></script>
+
+  <!-- =========================================
+       LEARNING LOGIC
+  ========================================== -->
   <script src="learn.js"></script>
+
+  <!-- =========================================
+       START BUTTON / FIRST-VISIT STATE
+  ========================================== -->
   <script>
     (function () {
-      try {
-        var raw = localStorage.getItem("mqg-learn");
-        var state = raw ? JSON.parse(raw) : {};
-        if (state.started || (state.completedLessons && state.completedLessons.length)) {
-          document.body.classList.add("is-learning");
-          if (window.MQGLearnRender) window.MQGLearnRender();
+      "use strict";
+
+      function getLearnState() {
+        try {
+          const raw = localStorage.getItem("mqg-learn");
+
+          if (!raw) {
+            return {};
+          }
+
+          const parsed = JSON.parse(raw);
+
+          if (!parsed || typeof parsed !== "object") {
+            return {};
+          }
+
+          return parsed;
+        } catch (error) {
+          console.error(
+            "Unable to read Learn Math progress:",
+            error
+          );
+
+          return {};
         }
-      } catch (e) {}
+      }
+
+      function showLearningApp() {
+        const welcome = document.getElementById("welcome-screen");
+        const app = document.getElementById("learn-app");
+
+        if (!welcome || !app) {
+          console.error(
+            "Learn Math interface elements were not found."
+          );
+          return;
+        }
+
+        document.body.classList.add("is-learning");
+
+        welcome.style.display = "none";
+        app.style.display = "block";
+
+        /*
+          Render current score, progress, lessons,
+          streak, achievements, etc.
+        */
+        if (
+          typeof window.MQGLearnRender === "function"
+        ) {
+          window.MQGLearnRender();
+        }
+      }
+
+      function startJourney() {
+        try {
+          /*
+            Use the existing learning store.
+          */
+          if (
+            window.MQGLearn &&
+            typeof window.MQGLearn.startJourney === "function"
+          ) {
+            window.MQGLearn.startJourney();
+          } else {
+            /*
+              Safe fallback if the learning store
+              fails to initialize.
+            */
+            const state = getLearnState();
+
+            state.started = true;
+
+            if (!state.currentLesson) {
+              state.currentLesson = "addition";
+            }
+
+            localStorage.setItem(
+              "mqg-learn",
+              JSON.stringify(state)
+            );
+          }
+
+          /*
+            Show the actual training interface.
+          */
+          showLearningApp();
+
+        } catch (error) {
+          console.error(
+            "Unable to start the Math Learning Journey:",
+            error
+          );
+
+          /*
+            Even if the storage/render system fails,
+            do not leave the user with a dead button.
+          */
+          showLearningApp();
+        }
+      }
+
+      /*
+        Bind the button after the DOM is ready.
+      */
+      document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+          const startButton =
+            document.getElementById("start-learning");
+
+          if (!startButton) {
+            console.error(
+              "Start Your Math Journey button was not found."
+            );
+            return;
+          }
+
+          startButton.addEventListener(
+            "click",
+            startJourney
+          );
+
+          /*
+            Returning user:
+            skip the welcome screen when the
+            journey has already started.
+          */
+          const state = getLearnState();
+
+          if (
+            state.started ||
+            (
+              Array.isArray(state.completedLessons) &&
+              state.completedLessons.length > 0
+            )
+          ) {
+            showLearningApp();
+          }
+
+        }
+      );
+
     })();
   </script>
+
 </body>
 </html>
