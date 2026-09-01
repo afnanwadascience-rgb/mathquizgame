@@ -15,6 +15,7 @@
 
   function on(id, eventName, handler) {
     var el = $(id);
+
     if (el) {
       el.addEventListener(eventName, handler);
     }
@@ -37,6 +38,12 @@
     total: 5
   };
 
+  /*
+   * ============================
+   * STATS
+   * ============================
+   */
+
   function renderStats() {
     var state = L.load();
 
@@ -46,69 +53,110 @@
 
     if ($("stat-streak")) {
       $("stat-streak").textContent =
-        state.streak + " day" + (state.streak === 1 ? "" : "s");
+        state.streak +
+        " day" +
+        (state.streak === 1 ? "" : "s");
     }
 
     if ($("stat-progress")) {
-      $("stat-progress").textContent = L.progressPercent(state) + "%";
+      $("stat-progress").textContent =
+        L.progressPercent(state) + "%";
     }
 
     if ($("stat-lessons")) {
       $("stat-lessons").textContent =
-        state.completedLessons.length + " / " + L.LESSONS.length;
+        state.completedLessons.length +
+        " / " +
+        L.LESSONS.length;
     }
 
     if ($("stat-level")) {
-      $("stat-level").textContent = L.levelName(state);
+      $("stat-level").textContent =
+        L.levelName(state);
     }
 
     if ($("stat-goal")) {
       $("stat-goal").textContent =
-        state.dailyGoal + " / " + state.dailyGoalTarget;
+        state.dailyGoal +
+        " / " +
+        state.dailyGoalTarget;
     }
 
+    /*
+     * IMPORTANT:
+     * L.nextLesson() always returns a lesson,
+     * but we still check for safety.
+     */
     var next = L.nextLesson(state);
 
-    if (next) {
+    if (next && $("continue-card")) {
+      var answered =
+        state.lessonProgress &&
+        typeof state.lessonProgress[next.id] === "number"
+          ? state.lessonProgress[next.id]
+          : 0;
+
       var pct = Math.round(
-        ((state.lessonProgress[next.id] || 0) / 5) * 100
+        (Math.min(answered, 5) / 5) * 100
       );
 
-      if ($("continue-card")) {
-        $("continue-card").textContent =
-          next.title + " · Progress: " + pct + "%";
-      }
+      $("continue-card").textContent =
+        next.title +
+        " · Progress: " +
+        pct +
+        "%";
     }
 
+    /*
+     * Daily challenge state
+     */
     if ($("challenge-start")) {
-      $("challenge-start").hidden = state.dailyChallengeDone;
+      $("challenge-start").hidden =
+        !!state.dailyChallengeDone;
     }
 
-    if (state.dailyChallengeDone && $("challenge-status")) {
+    if (
+      state.dailyChallengeDone &&
+      $("challenge-status")
+    ) {
       $("challenge-status").textContent =
-        "Today’s challenge complete · " +
+        "Today's challenge complete · " +
         state.dailyChallengeCorrect +
         " / 5 correct.";
     }
 
+    /*
+     * Achievements
+     */
     if ($("achievement-list")) {
-      $("achievement-list").innerHTML = L.ACHIEVEMENTS.map(function (item) {
-        var unlocked =
-          state.unlockedAchievements.indexOf(item.id) !== -1;
+      $("achievement-list").innerHTML =
+        L.ACHIEVEMENTS.map(function (item) {
+          var unlocked =
+            state.unlockedAchievements.indexOf(
+              item.id
+            ) !== -1;
 
-        return (
-          "<li>" +
-          "<span>" +
-          item.title +
-          "</span>" +
-          "<span>" +
-          (unlocked ? "Unlocked" : "Locked") +
-          "</span>" +
-          "</li>"
-        );
-      }).join("");
+          return (
+            "<li>" +
+            "<span>" +
+            item.title +
+            "</span>" +
+            "<span>" +
+            (unlocked
+              ? "Unlocked"
+              : "Locked") +
+            "</span>" +
+            "</li>"
+          );
+        }).join("");
     }
   }
+
+  /*
+   * ============================
+   * LESSON LIST
+   * ============================
+   */
 
   function renderLessons() {
     var list = $("lesson-list");
@@ -121,14 +169,22 @@
 
     list.innerHTML = L.LESSONS.map(function (lesson) {
       var done =
-        state.completedLessons.indexOf(lesson.id) !== -1;
+        state.completedLessons.indexOf(
+          lesson.id
+        ) !== -1;
 
       var answered =
-        state.lessonProgress[lesson.id] || 0;
+        state.lessonProgress &&
+        typeof state.lessonProgress[lesson.id] ===
+          "number"
+          ? state.lessonProgress[lesson.id]
+          : 0;
 
       var pct = done
         ? 100
-        : Math.round((answered / 5) * 100);
+        : Math.round(
+            (Math.min(answered, 5) / 5) * 100
+          );
 
       var label = done
         ? "Completed"
@@ -138,31 +194,49 @@
 
       return (
         '<article class="lesson-card">' +
-        "<h3>" +
-        lesson.title +
-        "</h3>" +
-        '<p class="lede">' +
-        lesson.description +
-        "</p>" +
-        '<p class="lede">Difficulty: ' +
-        lesson.difficulty +
-        " · Progress: " +
-        pct +
-        "%</p>" +
-        '<button type="button" class="primary-btn" data-lesson="' +
-        lesson.id +
-        '">' +
-        label +
-        "</button>" +
+          "<h3>" +
+          lesson.title +
+          "</h3>" +
+
+          '<p class="lede">' +
+          lesson.description +
+          "</p>" +
+
+          '<p class="lede">' +
+          "Difficulty: " +
+          lesson.difficulty +
+          " · Progress: " +
+          pct +
+          "%" +
+          "</p>" +
+
+          '<button type="button" ' +
+          'class="primary-btn" ' +
+          'data-lesson="' +
+          lesson.id +
+          '">' +
+          label +
+          "</button>" +
+
         "</article>"
       );
     }).join("");
   }
 
+  /*
+   * This function is called by learn.html
+   * after Start Your Math Journey is clicked.
+   */
   window.MQGLearnRender = function () {
     renderStats();
     renderLessons();
   };
+
+  /*
+   * ============================
+   * QUESTION GENERATION
+   * ============================
+   */
 
   function randInt(min, max) {
     return Math.floor(
@@ -178,6 +252,7 @@
 
     var a = randInt(1, max);
     var b = randInt(1, max);
+
     var answer;
 
     if (operation === "+") {
@@ -187,6 +262,9 @@
     } else if (operation === "*") {
       answer = a * b;
     } else {
+      /*
+       * Generate clean whole-number division.
+       */
       b = randInt(1, max);
       answer = randInt(1, 10);
       a = b * answer;
@@ -203,7 +281,9 @@
     var text = String(raw).trim();
 
     if (!text) {
-      return { ok: false };
+      return {
+        ok: false
+      };
     }
 
     if (operation === "/") {
@@ -216,7 +296,9 @@
     }
 
     if (!/^-?\d+$/.test(text)) {
-      return { ok: false };
+      return {
+        ok: false
+      };
     }
 
     return {
@@ -232,12 +314,22 @@
 
     if (question.operation === "/") {
       return (
-        Math.abs(parsed.value - question.answer) < 0.01
+        Math.abs(
+          parsed.value - question.answer
+        ) < 0.01
       );
     }
 
-    return parsed.value === question.answer;
+    return (
+      parsed.value === question.answer
+    );
   }
+
+  /*
+   * ============================
+   * LESSON PRACTICE
+   * ============================
+   */
 
   function showPractice(show) {
     if ($("lesson-practice")) {
@@ -250,30 +342,49 @@
   }
 
   function nextPracticeQuestion() {
-    practice.question = generateQuestion(
-      practice.lesson.ops,
-      practice.lesson.difficulty === "Hard"
-    );
+    if (
+      !practice.lesson ||
+      !practice.lesson.ops
+    ) {
+      return;
+    }
 
-    $("lesson-problem").textContent =
-      practice.question.text + " =";
+    practice.question =
+      generateQuestion(
+        practice.lesson.ops,
+        practice.lesson.difficulty === "Hard"
+      );
 
-    $("lesson-practice-meta").textContent =
-      "Question " +
-      (practice.index + 1) +
-      " / " +
-      practice.total;
+    if ($("lesson-problem")) {
+      $("lesson-problem").textContent =
+        practice.question.text + " =";
+    }
 
-    $("lesson-input").value = "";
-    $("lesson-input").focus();
+    if ($("lesson-practice-meta")) {
+      $("lesson-practice-meta").textContent =
+        "Question " +
+        (practice.index + 1) +
+        " / " +
+        practice.total;
+    }
+
+    if ($("lesson-input")) {
+      $("lesson-input").value = "";
+      $("lesson-input").focus();
+    }
   }
 
   function startLesson(id) {
-    var lesson = L.LESSONS.find(function (item) {
-      return item.id === id;
-    });
+    var lesson =
+      L.LESSONS.find(function (item) {
+        return item.id === id;
+      });
 
     if (!lesson) {
+      console.error(
+        "Lesson not found:",
+        id
+      );
       return;
     }
 
@@ -284,218 +395,363 @@
     practice.index = 0;
     practice.correct = 0;
 
-    $("lesson-practice-title").textContent =
-      lesson.title;
+    if ($("lesson-practice-title")) {
+      $("lesson-practice-title").textContent =
+        lesson.title;
+    }
 
-    $("lesson-feedback").textContent = "";
+    if ($("lesson-feedback")) {
+      $("lesson-feedback").textContent = "";
+      $("lesson-feedback").dataset.state = "";
+    }
 
     showPractice(true);
+
     nextPracticeQuestion();
     renderStats();
-  }
 
-  /*
-   * START YOUR MATH JOURNEY
-   *
-   * This was missing from the previous version.
-   * It hides the welcome screen and opens the learning app.
-   */
-  on("start-learning", "click", function () {
-    var welcomeScreen = $("welcome-screen");
-    var learnApp = $("learn-app");
-
-    if (welcomeScreen) {
-      welcomeScreen.hidden = true;
-    }
-
-    if (learnApp) {
-      learnApp.hidden = false;
-    }
-
-    renderStats();
-    renderLessons();
-
-    if (learnApp) {
-      learnApp.scrollIntoView({
+    if ($("lesson-practice")) {
+      $("lesson-practice").scrollIntoView({
         behavior: "smooth",
         block: "start"
       });
     }
-  });
-
-  on("continue-learning", "click", function () {
-    var next = L.nextLesson(L.load());
-
-    if (next) {
-      startLesson(next.id);
-    }
-  });
-
-  on("lesson-list", "click", function (event) {
-    var btn = event.target.closest("[data-lesson]");
-
-    if (btn) {
-      startLesson(
-        btn.getAttribute("data-lesson")
-      );
-    }
-  });
-
-  on("lesson-exit", "click", function () {
-    practice.active = false;
-
-    showPractice(false);
-    renderLessons();
-    renderStats();
-  });
-
-  on("lesson-form", "submit", function (event) {
-    event.preventDefault();
-
-    if (!practice.active || !practice.question) {
-      return;
-    }
-
-    var parsed = parseAnswer(
-      $("lesson-input").value,
-      practice.question.operation
-    );
-
-    var ok = isCorrect(
-      parsed,
-      practice.question
-    );
-
-    $("lesson-feedback").textContent = ok
-      ? "Correct"
-      : "Incorrect · " + practice.question.answer;
-
-    $("lesson-feedback").dataset.state =
-      ok ? "correct" : "incorrect";
-
-    if (ok) {
-      practice.correct += 1;
-      L.addCorrect(5);
-    }
-
-    practice.index += 1;
-
-    L.setLessonProgress(
-      practice.lesson.id,
-      practice.index
-    );
-
-    if (practice.index >= practice.total) {
-      if (practice.correct >= 3) {
-        L.completeLesson(
-          practice.lesson.id
-        );
-      }
-
-      practice.active = false;
-      showPractice(false);
-      renderLessons();
-    } else {
-      nextPracticeQuestion();
-    }
-
-    renderStats();
-  });
-
-  function nextChallengeQuestion() {
-    challenge.question = generateQuestion(
-      ["+", "-", "*", "/"],
-      false
-    );
-
-    $("challenge-problem").textContent =
-      challenge.question.text + " =";
-
-    $("challenge-input").value = "";
-
-    $("challenge-status").textContent =
-      "Question " +
-      (challenge.index + 1) +
-      " / " +
-      challenge.total;
   }
-
-  on("challenge-start", "click", function () {
-    if (L.load().dailyChallengeDone) {
-      return;
-    }
-
-    challenge.active = true;
-    challenge.index = 0;
-    challenge.correct = 0;
-
-    $("challenge-problem").hidden = false;
-    $("challenge-form").hidden = false;
-    $("challenge-start").hidden = true;
-
-    nextChallengeQuestion();
-    $("challenge-input").focus();
-  });
-
-  on("challenge-form", "submit", function (event) {
-    event.preventDefault();
-
-    if (!challenge.active || !challenge.question) {
-      return;
-    }
-
-    var parsed = parseAnswer(
-      $("challenge-input").value,
-      challenge.question.operation
-    );
-
-    var ok = isCorrect(
-      parsed,
-      challenge.question
-    );
-
-    $("challenge-feedback").textContent = ok
-      ? "Correct"
-      : "Incorrect · " + challenge.question.answer;
-
-    $("challenge-feedback").dataset.state =
-      ok ? "correct" : "incorrect";
-
-    if (ok) {
-      challenge.correct += 1;
-      L.addCorrect(5);
-    }
-
-    challenge.index += 1;
-
-    if (challenge.index >= challenge.total) {
-      challenge.active = false;
-
-      L.completeDailyChallenge(
-        challenge.correct
-      );
-
-      $("challenge-form").hidden = true;
-      $("challenge-problem").hidden = true;
-    } else {
-      nextChallengeQuestion();
-    }
-
-    renderStats();
-  });
 
   /*
-   * Initial render.
-   *
-   * Only render the learning content if the page
-   * elements already exist.
+   * Continue Learning button
    */
-  function initialize() {
-    renderStats();
-    renderLessons();
+  on(
+    "continue-learning",
+    "click",
+    function () {
+      var next = L.nextLesson(
+        L.load()
+      );
+
+      if (next) {
+        startLesson(next.id);
+      }
+    }
+  );
+
+  /*
+   * Lesson Start / Continue buttons
+   */
+  on(
+    "lesson-list",
+    "click",
+    function (event) {
+      var target = event.target;
+
+      if (!target) {
+        return;
+      }
+
+      var btn =
+        target.closest("[data-lesson]");
+
+      if (btn) {
+        startLesson(
+          btn.getAttribute(
+            "data-lesson"
+          )
+        );
+      }
+    }
+  );
+
+  /*
+   * Exit lesson
+   */
+  on(
+    "lesson-exit",
+    "click",
+    function () {
+      practice.active = false;
+      practice.lesson = null;
+      practice.question = null;
+
+      showPractice(false);
+
+      renderLessons();
+      renderStats();
+    }
+  );
+
+  /*
+   * Submit lesson answer
+   */
+  on(
+    "lesson-form",
+    "submit",
+    function (event) {
+      event.preventDefault();
+
+      if (
+        !practice.active ||
+        !practice.question ||
+        !$("lesson-input")
+      ) {
+        return;
+      }
+
+      var parsed =
+        parseAnswer(
+          $("lesson-input").value,
+          practice.question.operation
+        );
+
+      var ok =
+        isCorrect(
+          parsed,
+          practice.question
+        );
+
+      if ($("lesson-feedback")) {
+        $("lesson-feedback").textContent =
+          ok
+            ? "Correct"
+            : "Incorrect · " +
+              practice.question.answer;
+
+        $("lesson-feedback").dataset.state =
+          ok
+            ? "correct"
+            : "incorrect";
+      }
+
+      if (ok) {
+        practice.correct += 1;
+        L.addCorrect(5);
+      }
+
+      practice.index += 1;
+
+      L.setLessonProgress(
+        practice.lesson.id,
+        practice.index
+      );
+
+      /*
+       * Finish lesson
+       */
+      if (
+        practice.index >=
+        practice.total
+      ) {
+        if (practice.correct >= 3) {
+          L.completeLesson(
+            practice.lesson.id
+          );
+        }
+
+        practice.active = false;
+        practice.question = null;
+
+        showPractice(false);
+
+        renderLessons();
+      } else {
+        nextPracticeQuestion();
+      }
+
+      renderStats();
+    }
+  );
+
+  /*
+   * ============================
+   * DAILY CHALLENGE
+   * ============================
+   */
+
+  function nextChallengeQuestion() {
+    challenge.question =
+      generateQuestion(
+        ["+", "-", "*", "/"],
+        false
+      );
+
+    if ($("challenge-problem")) {
+      $("challenge-problem").textContent =
+        challenge.question.text + " =";
+    }
+
+    if ($("challenge-input")) {
+      $("challenge-input").value = "";
+    }
+
+    if ($("challenge-status")) {
+      $("challenge-status").textContent =
+        "Question " +
+        (challenge.index + 1) +
+        " / " +
+        challenge.total;
+    }
   }
 
-  if (document.readyState === "loading") {
+  /*
+   * Start daily challenge
+   */
+  on(
+    "challenge-start",
+    "click",
+    function () {
+      if (
+        L.load().dailyChallengeDone
+      ) {
+        return;
+      }
+
+      challenge.active = true;
+      challenge.index = 0;
+      challenge.correct = 0;
+
+      if ($("challenge-problem")) {
+        $("challenge-problem").hidden =
+          false;
+      }
+
+      if ($("challenge-form")) {
+        $("challenge-form").hidden =
+          false;
+      }
+
+      if ($("challenge-start")) {
+        $("challenge-start").hidden =
+          true;
+      }
+
+      if ($("challenge-feedback")) {
+        $("challenge-feedback").textContent =
+          "";
+      }
+
+      nextChallengeQuestion();
+
+      if ($("challenge-input")) {
+        $("challenge-input").focus();
+      }
+    }
+  );
+
+  /*
+   * Submit daily challenge answer
+   */
+  on(
+    "challenge-form",
+    "submit",
+    function (event) {
+      event.preventDefault();
+
+      if (
+        !challenge.active ||
+        !challenge.question ||
+        !$("challenge-input")
+      ) {
+        return;
+      }
+
+      var parsed =
+        parseAnswer(
+          $("challenge-input").value,
+          challenge.question.operation
+        );
+
+      var ok =
+        isCorrect(
+          parsed,
+          challenge.question
+        );
+
+      if ($("challenge-feedback")) {
+        $("challenge-feedback").textContent =
+          ok
+            ? "Correct"
+            : "Incorrect · " +
+              challenge.question.answer;
+
+        $("challenge-feedback").dataset.state =
+          ok
+            ? "correct"
+            : "incorrect";
+      }
+
+      if (ok) {
+        challenge.correct += 1;
+        L.addCorrect(5);
+      }
+
+      challenge.index += 1;
+
+      /*
+       * Challenge finished
+       */
+      if (
+        challenge.index >=
+        challenge.total
+      ) {
+        challenge.active = false;
+        challenge.question = null;
+
+        L.completeDailyChallenge(
+          challenge.correct
+        );
+
+        if ($("challenge-form")) {
+          $("challenge-form").hidden =
+            true;
+        }
+
+        if ($("challenge-problem")) {
+          $("challenge-problem").hidden =
+            true;
+        }
+
+        if ($("challenge-start")) {
+          $("challenge-start").hidden =
+            true;
+        }
+      } else {
+        nextChallengeQuestion();
+      }
+
+      renderStats();
+    }
+  );
+
+  /*
+   * ============================
+   * INITIALIZATION
+   * ============================
+   *
+   * Do NOT handle the Start Your Math
+   * Journey button here.
+   *
+   * learn.html already handles it with:
+   * startMathJourney()
+   *
+   * This file only exposes:
+   * window.MQGLearnRender()
+   */
+
+  function initialize() {
+    try {
+      renderStats();
+      renderLessons();
+    } catch (error) {
+      console.error(
+        "Math Quiz Learn initialization error:",
+        error
+      );
+    }
+  }
+
+  if (
+    document.readyState ===
+    "loading"
+  ) {
     document.addEventListener(
       "DOMContentLoaded",
       initialize
