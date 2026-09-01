@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +31,7 @@
         Math <span>Quiz</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary navigation">
+      <nav class="site-nav" aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
         <a href="learn.html">Learn Math</a>
         <a href="how-to-play.html">How to Play</a>
@@ -44,24 +43,84 @@
 
 
   <!-- =====================================================
-       SETUP SCREEN
-       app.js requires all elements below.
+       WELCOME SCREEN
+       THIS IS THE FIRST SCREEN THE USER SEES
+       ===================================================== -->
+
+  <section id="welcome-screen" class="welcome-screen">
+
+    <div class="welcome-math" aria-hidden="true">
+      <span>+</span>
+      <span>÷</span>
+      <span>π</span>
+      <span>×</span>
+      <span>√</span>
+      <span>12</span>
+      <span>−</span>
+      <span>=</span>
+      <span>7</span>
+      <span>△</span>
+    </div>
+
+    <div class="welcome-inner">
+
+      <p class="welcome-brand">
+        Math <span>Quiz</span>
+      </p>
+
+      <h1>
+        Start Your Math Journey
+      </h1>
+
+      <p class="welcome-copy">
+        Build your math skills with fast practice,
+        customizable quizzes, and guided learning.
+      </p>
+
+      <button
+        type="button"
+        class="primary-btn welcome-btn"
+        id="start-learning"
+      >
+        Start Your Math Journey
+      </button>
+
+      <p class="welcome-kicker">
+        Learn • Practice • Improve
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       MAIN QUIZ APPLICATION
        ===================================================== -->
 
   <main>
 
-    <section id="setup-screen" class="page-wrap">
+
+    <!-- ===================================================
+         QUIZ SETUP SCREEN
+         Hidden until Start Your Math Journey is clicked.
+         =================================================== -->
+
+    <section
+      id="setup-screen"
+      class="page-wrap"
+      hidden
+    >
 
       <div class="panel">
 
-        <h1>Math Quiz</h1>
+        <h1>
+          Math Quiz
+        </h1>
 
         <p class="lede">
           Test your speed and accuracy with customizable math questions.
         </p>
-
-
-        <!-- DAILY INDICATOR -->
 
         <p
           id="daily-indicator"
@@ -72,12 +131,13 @@
         </p>
 
 
-        <!-- =================================================
-             DIFFICULTY
-             ================================================= -->
+        <!-- DIFFICULTY -->
 
         <fieldset>
-          <legend>Difficulty</legend>
+
+          <legend>
+            Difficulty
+          </legend>
 
           <label>
             <input
@@ -119,39 +179,36 @@
         </fieldset>
 
 
-        <!-- =================================================
-             CUSTOM RANGE
-             ================================================= -->
+        <!-- CUSTOM RANGE -->
 
-        <div id="custom-range" hidden>
+        <div
+          id="custom-range"
+          hidden
+        >
 
-          <div>
-            <label for="min-number">
-              Minimum number
-            </label>
+          <label for="min-number">
+            Minimum number
+          </label>
 
-            <input
-              id="min-number"
-              type="number"
-              min="0"
-              max="10000"
-              value="1"
-            />
-          </div>
+          <input
+            id="min-number"
+            type="number"
+            min="0"
+            max="10000"
+            value="1"
+          />
 
-          <div>
-            <label for="max-number">
-              Maximum number
-            </label>
+          <label for="max-number">
+            Maximum number
+          </label>
 
-            <input
-              id="max-number"
-              type="number"
-              min="1"
-              max="10000"
-              value="100"
-            />
-          </div>
+          <input
+            id="max-number"
+            type="number"
+            min="1"
+            max="10000"
+            value="10"
+          />
 
           <p
             id="range-error"
@@ -162,12 +219,13 @@
         </div>
 
 
-        <!-- =================================================
-             OPERATION
-             ================================================= -->
+        <!-- OPERATION -->
 
         <fieldset>
-          <legend>Operation</legend>
+
+          <legend>
+            Operation
+          </legend>
 
           <label>
             <input
@@ -218,12 +276,13 @@
         </fieldset>
 
 
-        <!-- =================================================
-             MODE
-             ================================================= -->
+        <!-- GAME MODE -->
 
         <fieldset>
-          <legend>Game mode</legend>
+
+          <legend>
+            Game mode
+          </legend>
 
           <label>
             <input
@@ -247,14 +306,15 @@
         </fieldset>
 
 
-        <!-- =================================================
-             DURATION
-             ================================================= -->
+        <!-- TIME LIMIT -->
 
         <div id="duration-row">
 
           <fieldset>
-            <legend>Time limit</legend>
+
+            <legend>
+              Time limit
+            </legend>
 
             <label>
               <input
@@ -289,9 +349,7 @@
         </div>
 
 
-        <!-- =================================================
-             THEME
-             ================================================= -->
+        <!-- THEME -->
 
         <div>
 
@@ -300,6 +358,7 @@
           </label>
 
           <select id="theme-select">
+
             <option value="system">
               System
             </option>
@@ -311,14 +370,13 @@
             <option value="dark">
               Dark
             </option>
+
           </select>
 
         </div>
 
 
-        <!-- =================================================
-             START
-             ================================================= -->
+        <!-- START QUIZ -->
 
         <button
           type="button"
@@ -331,16 +389,16 @@
       </div>
 
 
-      <!-- =================================================
-           LEARN LINK
-           ================================================= -->
+      <!-- LEARN LINK -->
 
       <section class="panel">
 
-        <h2>Want to improve your skills?</h2>
+        <h2>
+          Want to improve your skills?
+        </h2>
 
         <p class="lede">
-          Practice step by step with guided math lessons,
+          Learn math step by step with guided lessons,
           challenges, streaks, and achievements.
         </p>
 
@@ -356,9 +414,9 @@
     </section>
 
 
-    <!-- =====================================================
+    <!-- ===================================================
          PLAY SCREEN
-         ===================================================== -->
+         =================================================== -->
 
     <section
       id="play-screen"
@@ -367,8 +425,6 @@
     >
 
       <div class="panel">
-
-        <!-- GAME HEADER -->
 
         <div class="quiz-hud">
 
@@ -386,13 +442,13 @@
 
           <div>
             <span>Multiplier</span>
-            <strong id="multiplier">1×</strong>
+            <strong id="multiplier">
+              1×
+            </strong>
           </div>
 
         </div>
 
-
-        <!-- MODE -->
 
         <p
           id="mode-badge"
@@ -407,8 +463,15 @@
         <div id="timer-wrap">
 
           <div class="timer-label">
-            <span>Time</span>
-            <strong id="time-label">60s</strong>
+
+            <span>
+              Time
+            </span>
+
+            <strong id="time-label">
+              60s
+            </strong>
+
           </div>
 
           <div
@@ -418,7 +481,9 @@
             aria-valuemax="100"
             aria-valuenow="100"
           >
+
             <div id="progress-fill"></div>
+
           </div>
 
         </div>
@@ -530,9 +595,9 @@
     </section>
 
 
-    <!-- =====================================================
+    <!-- ===================================================
          RESULT SCREEN
-         ===================================================== -->
+         =================================================== -->
 
     <section
       id="result-screen"
@@ -542,7 +607,9 @@
 
       <div class="panel">
 
-        <h1>Quiz Complete</h1>
+        <h1>
+          Quiz Complete
+        </h1>
 
         <p
           id="result-summary"
@@ -552,9 +619,9 @@
         </p>
 
 
-        <!-- STATISTICS -->
-
-        <h2>Your Statistics</h2>
+        <h2>
+          Your Statistics
+        </h2>
 
         <ul
           id="stats-list"
@@ -582,8 +649,6 @@
         </ul>
 
 
-        <!-- ACTIONS -->
-
         <div>
 
           <button
@@ -605,8 +670,6 @@
         </div>
 
 
-        <!-- LEARN -->
-
         <p class="lede">
 
           <a href="learn.html">
@@ -624,18 +687,47 @@
 
   <!-- =====================================================
        SCRIPTS
-       =====================================================
-
-       learn-store.js is loaded first because app.js can
-       update learning progress through window.MQGLearn.
-
-       app.js is loaded last because it controls the
-       main Math Quiz interface.
        ===================================================== -->
 
   <script src="learn-store.js"></script>
+
   <script src="app.js"></script>
+
+
+  <!-- =====================================================
+       WELCOME SCREEN CONTROLLER
+
+       The welcome screen is shown first.
+
+       Clicking "Start Your Math Journey" reveals the
+       existing app.js setup screen.
+
+       This does NOT replace or modify app.js.
+       ===================================================== -->
+
+  <script>
+    (function () {
+      "use strict";
+
+      var welcome = document.getElementById("welcome-screen");
+      var setup = document.getElementById("setup-screen");
+      var startLearning = document.getElementById("start-learning");
+      var startQuiz = document.getElementById("start-btn");
+
+      if (!welcome || !setup || !startLearning) {
+        return;
+      }
+
+      startLearning.addEventListener("click", function () {
+        welcome.hidden = true;
+        setup.hidden = false;
+
+        if (startQuiz) {
+          startQuiz.focus();
+        }
+      });
+    })();
+  </script>
 
 </body>
 </html>
-```
