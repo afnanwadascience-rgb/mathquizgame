@@ -7,41 +7,68 @@
     return;
   }
 
-  var welcomeEl = document.getElementById("welcome-screen");
-  var appEl = document.getElementById("learn-app");
-  var startBtn = document.getElementById("start-learning");
-  var continueBtn = document.getElementById("continue-learning");
+  function $(id) {
+    return document.getElementById(id);
+  }
+
+  function on(id, eventName, handler) {
+    var el = $(id);
+    if (el) el.addEventListener(eventName, handler);
+  }
 
   var practice = { active: false, lesson: null, index: 0, correct: 0, question: null, total: 5 };
   var challenge = { active: false, index: 0, correct: 0, question: null, total: 5 };
 
-  function hasStarted() {
+  function renderStats() {
     var state = L.load();
-    return !!(state.started || (state.completedLessons && state.completedLessons.length) || state.correctAnswers);
-  }
+    if ($("stat-score")) $("stat-score").textContent = String(state.score);
+    if ($("stat-streak")) $("stat-streak").textContent = state.streak + " day" + (state.streak === 1 ? "" : "s");
+    if ($("stat-progress")) $("stat-progress").textContent = L.progressPercent(state) + "%";
+    if ($("stat-lessons")) $("stat-lessons").textContent = state.completedLessons.length + " / " + L.LESSONS.length;
+    if ($("stat-level")) $("stat-level").textContent = L.levelName(state);
+    if ($("stat-goal")) $("stat-goal").textContent = state.dailyGoal + " / " + state.dailyGoalTarget;
 
-  function showWelcome() {
-    document.body.classList.add("welcome-active");
-    if (welcomeEl) welcomeEl.hidden = false;
-    if (appEl) appEl.hidden = true;
-  }
+    var next = L.nextLesson(state);
+    var pct = Math.round(((state.lessonProgress[next.id] || 0) / 5) * 100);
+    if ($("continue-card")) $("continue-card").textContent = next.title + " · Progress: " + pct + "%";
 
-  function showTraining(animate) {
-    document.body.classList.remove("welcome-active");
-    if (welcomeEl) welcomeEl.hidden = true;
-    if (appEl) {
-      appEl.hidden = false;
-      appEl.removeAttribute("hidden");
-      appEl.style.display = "";
-      if (animate) {
-        appEl.classList.remove("learn-enter");
-        void appEl.offsetWidth;
-        appEl.classList.add("learn-enter");
-      }
+    if ($("challenge-start")) $("challenge-start").hidden = state.dailyChallengeDone;
+    if (state.dailyChallengeDone && $("challenge-status")) {
+      $("challenge-status").textContent = "Today’s challenge complete · " + state.dailyChallengeCorrect + " / 5 correct.";
     }
+
+    if ($("achievement-list")) {
+      $("achievement-list").innerHTML = L.ACHIEVEMENTS.map(function (item) {
+        var unlocked = state.unlockedAchievements.indexOf(item.id) !== -1;
+        return "<li><span>" + item.title + "</span><span>" + (unlocked ? "Unlocked" : "Locked") + "</span></li>";
+      }).join("");
+    }
+  }
+
+  function renderLessons() {
+    var list = $("lesson-list");
+    if (!list) return;
+    var state = L.load();
+    list.innerHTML = L.LESSONS.map(function (lesson) {
+      var done = state.completedLessons.indexOf(lesson.id) !== -1;
+      var answered = state.lessonProgress[lesson.id] || 0;
+      var pct = done ? 100 : Math.round((answered / 5) * 100);
+      var label = done ? "Completed" : answered ? "Continue" : "Start";
+      return (
+        '<article class="lesson-card">' +
+          "<h3>" + lesson.title + "</h3>" +
+          "<p class=\"lede\">" + lesson.description + "</p>" +
+          "<p class=\"lede\">Difficulty: " + lesson.difficulty + " · Progress: " + pct + "%</p>" +
+          '<button type="button" class="primary-btn" data-lesson="' + lesson.id + '">' + label + "</button>" +
+        "</article>"
+      );
+    }).join("");
+  }
+
+  window.MQGLearnRender = function () {
     renderStats();
     renderLessons();
-  }
+  };
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -81,63 +108,17 @@
     return parsed.value === question.answer;
   }
 
-  function renderStats() {
-    var state = L.load();
-    document.getElementById("stat-score").textContent = String(state.score);
-    document.getElementById("stat-streak").textContent = state.streak + " day" + (state.streak === 1 ? "" : "s");
-    document.getElementById("stat-progress").textContent = L.progressPercent(state) + "%";
-    document.getElementById("stat-lessons").textContent = state.completedLessons.length + " / " + L.LESSONS.length;
-    document.getElementById("stat-level").textContent = L.levelName(state);
-    document.getElementById("stat-goal").textContent = state.dailyGoal + " / " + state.dailyGoalTarget;
-
-    var next = L.nextLesson(state);
-    var pct = Math.round(((state.lessonProgress[next.id] || 0) / 5) * 100);
-    var card = document.getElementById("continue-card");
-    if (card) card.textContent = next.title + " · Progress: " + pct + "%";
-
-    var challengeStart = document.getElementById("challenge-start");
-    if (challengeStart) challengeStart.hidden = state.dailyChallengeDone;
-    if (state.dailyChallengeDone) {
-      document.getElementById("challenge-status").textContent = "Today’s challenge complete · " + state.dailyChallengeCorrect + " / 5 correct.";
-    }
-
-    document.getElementById("achievement-list").innerHTML = L.ACHIEVEMENTS.map(function (item) {
-      var unlocked = state.unlockedAchievements.indexOf(item.id) !== -1;
-      return "<li><span>" + item.title + "</span><span>" + (unlocked ? "Unlocked" : "Locked") + "</span></li>";
-    }).join("");
-  }
-
-  function renderLessons() {
-    var list = document.getElementById("lesson-list");
-    if (!list) return;
-    var state = L.load();
-    list.innerHTML = L.LESSONS.map(function (lesson) {
-      var done = state.completedLessons.indexOf(lesson.id) !== -1;
-      var answered = state.lessonProgress[lesson.id] || 0;
-      var pct = done ? 100 : Math.round((answered / 5) * 100);
-      var label = done ? "Completed" : answered ? "Continue" : "Start";
-      return (
-        '<article class="lesson-card">' +
-          "<h3>" + lesson.title + "</h3>" +
-          "<p class=\"lede\">" + lesson.description + "</p>" +
-          "<p class=\"lede\">Difficulty: " + lesson.difficulty + " · Progress: " + pct + "%</p>" +
-          '<button type="button" class="primary-btn" data-lesson="' + lesson.id + '">' + label + "</button>" +
-        "</article>"
-      );
-    }).join("");
-  }
-
   function showPractice(show) {
-    document.getElementById("lesson-practice").hidden = !show;
-    document.getElementById("lesson-list").hidden = show;
+    if ($("lesson-practice")) $("lesson-practice").hidden = !show;
+    if ($("lesson-list")) $("lesson-list").hidden = show;
   }
 
   function nextPracticeQuestion() {
     practice.question = generateQuestion(practice.lesson.ops, practice.lesson.difficulty === "Hard");
-    document.getElementById("lesson-problem").textContent = practice.question.text + " =";
-    document.getElementById("lesson-practice-meta").textContent = "Question " + (practice.index + 1) + " / " + practice.total;
-    document.getElementById("lesson-input").value = "";
-    document.getElementById("lesson-input").focus();
+    $("lesson-problem").textContent = practice.question.text + " =";
+    $("lesson-practice-meta").textContent = "Question " + (practice.index + 1) + " / " + practice.total;
+    $("lesson-input").value = "";
+    $("lesson-input").focus();
   }
 
   function startLesson(id) {
@@ -148,46 +129,36 @@
     practice.lesson = lesson;
     practice.index = 0;
     practice.correct = 0;
-    document.getElementById("lesson-practice-title").textContent = lesson.title;
-    document.getElementById("lesson-feedback").textContent = "";
+    $("lesson-practice-title").textContent = lesson.title;
+    $("lesson-feedback").textContent = "";
     showPractice(true);
     nextPracticeQuestion();
     renderStats();
   }
 
-  if (startBtn) {
-    startBtn.addEventListener("click", function (event) {
-      event.preventDefault();
-      L.startJourney();
-      showTraining(true);
-    });
-  }
+  on("continue-learning", "click", function () {
+    startLesson(L.nextLesson().id);
+  });
 
-  if (continueBtn) {
-    continueBtn.addEventListener("click", function () {
-      startLesson(L.nextLesson().id);
-    });
-  }
-
-  document.getElementById("lesson-list").addEventListener("click", function (event) {
+  on("lesson-list", "click", function (event) {
     var btn = event.target.closest("[data-lesson]");
     if (btn) startLesson(btn.getAttribute("data-lesson"));
   });
 
-  document.getElementById("lesson-exit").addEventListener("click", function () {
+  on("lesson-exit", "click", function () {
     practice.active = false;
     showPractice(false);
     renderLessons();
     renderStats();
   });
 
-  document.getElementById("lesson-form").addEventListener("submit", function (event) {
+  on("lesson-form", "submit", function (event) {
     event.preventDefault();
     if (!practice.active || !practice.question) return;
-    var parsed = parseAnswer(document.getElementById("lesson-input").value, practice.question.operation);
+    var parsed = parseAnswer($("lesson-input").value, practice.question.operation);
     var ok = isCorrect(parsed, practice.question);
-    document.getElementById("lesson-feedback").textContent = ok ? "Correct" : ("Incorrect · " + practice.question.answer);
-    document.getElementById("lesson-feedback").dataset.state = ok ? "correct" : "incorrect";
+    $("lesson-feedback").textContent = ok ? "Correct" : ("Incorrect · " + practice.question.answer);
+    $("lesson-feedback").dataset.state = ok ? "correct" : "incorrect";
     if (ok) {
       practice.correct += 1;
       L.addCorrect(5);
@@ -207,30 +178,30 @@
 
   function nextChallengeQuestion() {
     challenge.question = generateQuestion(["+", "-", "*", "/"], false);
-    document.getElementById("challenge-problem").textContent = challenge.question.text + " =";
-    document.getElementById("challenge-input").value = "";
-    document.getElementById("challenge-status").textContent = "Question " + (challenge.index + 1) + " / " + challenge.total;
+    $("challenge-problem").textContent = challenge.question.text + " =";
+    $("challenge-input").value = "";
+    $("challenge-status").textContent = "Question " + (challenge.index + 1) + " / " + challenge.total;
   }
 
-  document.getElementById("challenge-start").addEventListener("click", function () {
+  on("challenge-start", "click", function () {
     if (L.load().dailyChallengeDone) return;
     challenge.active = true;
     challenge.index = 0;
     challenge.correct = 0;
-    document.getElementById("challenge-problem").hidden = false;
-    document.getElementById("challenge-form").hidden = false;
-    document.getElementById("challenge-start").hidden = true;
+    $("challenge-problem").hidden = false;
+    $("challenge-form").hidden = false;
+    $("challenge-start").hidden = true;
     nextChallengeQuestion();
-    document.getElementById("challenge-input").focus();
+    $("challenge-input").focus();
   });
 
-  document.getElementById("challenge-form").addEventListener("submit", function (event) {
+  on("challenge-form", "submit", function (event) {
     event.preventDefault();
     if (!challenge.active || !challenge.question) return;
-    var parsed = parseAnswer(document.getElementById("challenge-input").value, challenge.question.operation);
+    var parsed = parseAnswer($("challenge-input").value, challenge.question.operation);
     var ok = isCorrect(parsed, challenge.question);
-    document.getElementById("challenge-feedback").textContent = ok ? "Correct" : ("Incorrect · " + challenge.question.answer);
-    document.getElementById("challenge-feedback").dataset.state = ok ? "correct" : "incorrect";
+    $("challenge-feedback").textContent = ok ? "Correct" : ("Incorrect · " + challenge.question.answer);
+    $("challenge-feedback").dataset.state = ok ? "correct" : "incorrect";
     if (ok) {
       challenge.correct += 1;
       L.addCorrect(5);
@@ -239,14 +210,11 @@
     if (challenge.index >= challenge.total) {
       challenge.active = false;
       L.completeDailyChallenge(challenge.correct);
-      document.getElementById("challenge-form").hidden = true;
-      document.getElementById("challenge-problem").hidden = true;
+      $("challenge-form").hidden = true;
+      $("challenge-problem").hidden = true;
     } else {
       nextChallengeQuestion();
     }
     renderStats();
   });
-
-  if (hasStarted()) showTraining(false);
-  else showWelcome();
 })();

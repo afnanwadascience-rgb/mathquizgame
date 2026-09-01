@@ -595,3 +595,7 @@ footer {
     animation: none;
   }
 }
+#learn-app[hidden],
+#welcome-screen[hidden] {
+  display: none !important;
+}
