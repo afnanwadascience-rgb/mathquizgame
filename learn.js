@@ -5,6 +5,33 @@
   var practice = { active: false, lesson: null, index: 0, correct: 0, question: null, total: 5 };
   var challenge = { active: false, index: 0, correct: 0, question: null, total: 5 };
 
+  var welcomeEl = document.getElementById("welcome-screen");
+  var appEl = document.getElementById("learn-app");
+
+  function hasStarted() {
+    var state = L.load();
+    return !!(state.started || state.completedLessons.length || state.correctAnswers);
+  }
+
+  function showWelcome() {
+    document.body.classList.add("welcome-active");
+    welcomeEl.hidden = false;
+    appEl.hidden = true;
+  }
+
+  function showTraining(animate) {
+    document.body.classList.remove("welcome-active");
+    welcomeEl.hidden = true;
+    appEl.hidden = false;
+    if (animate) {
+      appEl.classList.remove("learn-enter");
+      void appEl.offsetWidth;
+      appEl.classList.add("learn-enter");
+    }
+    renderStats();
+    renderLessons();
+  }
+
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
@@ -52,21 +79,9 @@
     document.getElementById("stat-level").textContent = L.levelName(state);
     document.getElementById("stat-goal").textContent = state.dailyGoal + " / " + state.dailyGoalTarget;
 
-    var heading = document.getElementById("learn-heading");
-    var button = document.getElementById("start-learning");
-    var card = document.getElementById("continue-card");
     var next = L.nextLesson(state);
-    if (!state.started && state.completedLessons.length === 0) {
-      heading.textContent = "Start Your Math Learning Journey";
-      button.textContent = "Start Learning";
-      card.hidden = true;
-    } else {
-      heading.textContent = "Continue Learning";
-      button.textContent = "Continue Learning";
-      card.hidden = false;
-      var pct = Math.round(((state.lessonProgress[next.id] || 0) / 5) * 100);
-      card.textContent = next.title + " · Progress: " + pct + "%";
-    }
+    var pct = Math.round(((state.lessonProgress[next.id] || 0) / 5) * 100);
+    document.getElementById("continue-card").textContent = next.title + " · Progress: " + pct + "%";
 
     document.getElementById("challenge-start").hidden = state.dailyChallengeDone;
     if (state.dailyChallengeDone) {
@@ -126,8 +141,12 @@
   }
 
   document.getElementById("start-learning").addEventListener("click", function () {
-    var state = L.startJourney();
-    startLesson(L.nextLesson(state).id);
+    L.startJourney();
+    showTraining(true);
+  });
+
+  document.getElementById("continue-learning").addEventListener("click", function () {
+    startLesson(L.nextLesson().id);
   });
 
   document.getElementById("lesson-list").addEventListener("click", function (event) {
@@ -208,6 +227,6 @@
     renderStats();
   });
 
-  renderStats();
-  renderLessons();
+  if (hasStarted()) showTraining(false);
+  else showWelcome();
 })();

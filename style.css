@@ -482,3 +482,116 @@ footer {
   60% { transform: translateX(-3px); }
   80% { transform: translateX(3px); }
 }
+.welcome-screen {
+  position: relative;
+  min-height: calc(100vh - 68px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 12% 20%, rgba(37, 99, 235, 0.10), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(37, 99, 235, 0.08), transparent 40%),
+    linear-gradient(#ffffff, #f4f7ff);
+  background-image:
+    radial-gradient(circle at 12% 20%, rgba(37, 99, 235, 0.10), transparent 42%),
+    radial-gradient(circle at 88% 78%, rgba(37, 99, 235, 0.08), transparent 40%),
+    linear-gradient(#ffffff, #f4f7ff);
+}
+
+.welcome-screen::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(37, 99, 235, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(37, 99, 235, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  pointer-events: none;
+}
+
+.welcome-math {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: rgba(37, 99, 235, 0.18);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+}
+
+.welcome-math span {
+  position: absolute;
+}
+
+.welcome-math span:nth-child(1) { top: 12%; left: 8%; }
+.welcome-math span:nth-child(2) { top: 18%; right: 12%; }
+.welcome-math span:nth-child(3) { top: 42%; left: 6%; }
+.welcome-math span:nth-child(4) { bottom: 22%; left: 14%; }
+.welcome-math span:nth-child(5) { top: 30%; right: 8%; }
+.welcome-math span:nth-child(6) { bottom: 16%; right: 16%; }
+.welcome-math span:nth-child(7) { top: 62%; left: 22%; }
+.welcome-math span:nth-child(8) { top: 10%; left: 46%; }
+.welcome-math span:nth-child(9) { bottom: 12%; left: 48%; }
+.welcome-math span:nth-child(10) { top: 52%; right: 22%; }
+
+.welcome-inner {
+  position: relative;
+  z-index: 1;
+  width: min(560px, calc(100% - 2rem));
+  text-align: center;
+  padding: 1.5rem 0 2.5rem;
+}
+
+.welcome-brand {
+  margin: 0 0 0.75rem;
+  color: #2563eb;
+  font-weight: 700;
+  font-size: 1.05rem;
+}
+
+.welcome-brand span {
+  color: #111;
+}
+
+.welcome-inner h1 {
+  margin: 0 0 0.7rem;
+  font-size: clamp(1.8rem, 7vw, 3rem);
+  line-height: 1.15;
+}
+
+.welcome-copy {
+  margin: 0 auto 1.4rem;
+  color: #6b7280;
+  max-width: 28rem;
+}
+
+.welcome-btn {
+  width: min(100%, 320px);
+}
+
+.welcome-kicker {
+  margin: 1rem 0 0;
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.learn-enter {
+  animation: learnEnter 280ms ease;
+}
+
+@keyframes learnEnter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .learn-enter {
+    animation: none;
+  }
+}

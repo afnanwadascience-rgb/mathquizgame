@@ -2,153 +2,100 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Math Quiz — Free Online Math Quiz Game</title>
-  <meta name="description" content="Practice mental math with addition, subtraction, multiplication, and division." />
-  <meta name="theme-color" content="#2563eb" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn Math — Math Quiz</title>
+  <meta name="description" content="Learn math step by step with lessons, a daily challenge, score, and streak." />
   <link rel="stylesheet" href="style.css" />
   <script>document.documentElement.setAttribute("data-theme", "light");</script>
 </head>
-<body>
-  <a class="skip-link" href="#main">Skip to game</a>
-
+<body class="learn-page">
   <header class="site-header">
     <div class="site-header-inner">
       <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
       <nav class="site-nav" aria-label="Primary">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="learn.html">Learn Math</a>
+        <a href="index.html">Home</a>
+        <a href="learn.html" aria-current="page">Learn Math</a>
         <a href="how-to-play.html">How to Play</a>
         <a href="about.html">About</a>
       </nav>
     </div>
   </header>
 
-  <header class="topbar">
-    <div class="brand">
-      <h1>Math Quiz</h1>
-      <p class="tagline">Mental math practice</p>
+  <section id="welcome-screen" class="welcome-screen" hidden>
+    <div class="welcome-math" aria-hidden="true">
+      <span>+</span><span>÷</span><span>π</span><span>×</span><span>√</span>
+      <span>12</span><span>−</span><span>=</span><span>7</span><span>△</span>
     </div>
-    <div class="top-actions">
-      <p class="daily" id="daily-indicator" aria-live="polite">Daily streak: 0</p>
-      <div class="theme-wrap">
-        <label for="theme-select">Theme</label>
-        <select id="theme-select" aria-label="Color theme">
-          <option value="light" selected>Light</option>
-          <option value="system">System</option>
-          <option value="dark">Dark</option>
-        </select>
-      </div>
+    <div class="welcome-inner">
+      <p class="welcome-brand">Math <span>Quiz</span></p>
+      <h1>Start Your Math Journey</h1>
+      <p class="welcome-copy">Build your skills step by step with practice, challenges, and guided lessons.</p>
+      <button type="button" class="primary-btn welcome-btn" id="start-learning">Start Your Math Journey</button>
+      <p class="welcome-kicker">Learn • Practice • Improve</p>
     </div>
-  </header>
+  </section>
 
-  <main id="main">
-    <section id="setup-screen" class="panel" aria-labelledby="setup-title">
-      <h2 id="setup-title">Start the Quiz</h2>
-      <p class="lede">Choose a difficulty, operation, and mode, then start. Timed rounds use a countdown. Endless mode ends after 3 misses.</p>
-
-      <fieldset class="choice-group">
-        <legend>Difficulty</legend>
-        <div class="chip-row" role="radiogroup" aria-label="Difficulty">
-          <label class="chip"><input type="radio" name="difficulty" value="easy" checked /> Easy (1–10)</label>
-          <label class="chip"><input type="radio" name="difficulty" value="medium" /> Medium (1–100)</label>
-          <label class="chip"><input type="radio" name="difficulty" value="hard" /> Hard (1–1000)</label>
-          <label class="chip"><input type="radio" name="difficulty" value="custom" /> Custom</label>
-        </div>
-        <div id="custom-range" class="custom-range" hidden>
-          <label>Min <input id="min-number" type="number" inputmode="numeric" min="0" max="10000" value="1" /></label>
-          <label>Max <input id="max-number" type="number" inputmode="numeric" min="1" max="10000" value="40" /></label>
-          <p class="hint" id="range-error" role="alert"></p>
-        </div>
-      </fieldset>
-
-      <fieldset class="choice-group">
-        <legend>Operation</legend>
-        <div class="chip-row" role="radiogroup" aria-label="Operation">
-          <label class="chip"><input type="radio" name="operation" value="+" /> Addition</label>
-          <label class="chip"><input type="radio" name="operation" value="-" /> Subtraction</label>
-          <label class="chip"><input type="radio" name="operation" value="*" /> Multiplication</label>
-          <label class="chip"><input type="radio" name="operation" value="/" /> Division</label>
-          <label class="chip"><input type="radio" name="operation" value="mixed" checked /> Mixed</label>
-        </div>
-      </fieldset>
-
-      <fieldset class="choice-group">
-        <legend>Mode</legend>
-        <div class="chip-row" role="radiogroup" aria-label="Game mode">
-          <label class="chip"><input type="radio" name="mode" value="timed" checked /> Timed</label>
-          <label class="chip"><input type="radio" name="mode" value="endless" /> Endless (3 misses)</label>
-        </div>
-        <div id="duration-row" class="chip-row" role="radiogroup" aria-label="Timed duration">
-          <label class="chip"><input type="radio" name="duration" value="60" checked /> 60s</label>
-          <label class="chip"><input type="radio" name="duration" value="90" /> 90s</label>
-          <label class="chip"><input type="radio" name="duration" value="120" /> 120s</label>
-        </div>
-      </fieldset>
-
-      <button type="button" class="primary-btn" id="start-btn">Start Quiz</button>
+  <main id="learn-app" class="page-wrap" hidden>
+    <section class="panel">
+      <h1 id="learn-heading">Continue Learning</h1>
+      <p class="lede" id="learn-copy">Pick up where you left off. Your score and streak stay on this device.</p>
+      <p class="continue-card" id="continue-card"></p>
+      <button type="button" class="primary-btn" id="continue-learning">Continue Learning</button>
     </section>
 
-    <section id="play-screen" class="panel play-panel" hidden aria-labelledby="problem">
-      <div class="status-row">
-        <p class="mode-badge" id="mode-badge">Timed · 60s</p>
-        <p class="stat">Score <strong id="score">0</strong></p>
-        <p class="stat streak" id="streak-display">Streak: 0</p>
-        <p class="stat">Combo <strong id="multiplier">1x</strong></p>
-      </div>
+    <section class="stats-grid" aria-label="Learning stats">
+      <article class="stat-card"><h2>Math Score</h2><p id="stat-score">0</p></article>
+      <article class="stat-card"><h2>Day Streak</h2><p id="stat-streak">0 days</p></article>
+      <article class="stat-card"><h2>Learning Progress</h2><p id="stat-progress">0%</p></article>
+      <article class="stat-card"><h2>Lessons Completed</h2><p id="stat-lessons">0 / 10</p></article>
+      <article class="stat-card"><h2>Current Level</h2><p id="stat-level">New learner</p></article>
+      <article class="stat-card"><h2>Today's Goal</h2><p id="stat-goal">0 / 5</p></article>
+    </section>
 
-      <div id="timer-wrap" class="timer-wrap">
-        <div class="timer-meta">
-          <span>Time left</span>
-          <span id="time-label">60s</span>
-        </div>
-        <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-label="Time remaining" id="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
-        </div>
-      </div>
-
-      <p class="misses" id="misses-label" hidden>Misses: 0 / 3</p>
-      <p class="problem" id="problem" aria-live="polite">0 + 0</p>
-      <p class="sr-only" id="feedback-live" aria-live="assertive"></p>
-
-      <form id="answer-form" class="answer-form" autocomplete="off">
-        <label for="answer-input">Your answer</label>
+    <section class="panel" id="challenge-panel">
+      <h2>Daily Math Challenge</h2>
+      <p class="lede" id="challenge-status">5 mixed questions. Completing it counts toward today’s goal.</p>
+      <p class="problem" id="challenge-problem" hidden>0 + 0</p>
+      <form id="challenge-form" class="answer-form" hidden>
+        <label for="challenge-input">Your answer</label>
         <div class="answer-row">
-          <input id="answer-input" name="answer" type="text" inputmode="decimal" enterkeyhint="done" autocomplete="off" aria-describedby="feedback-live" />
-          <button type="submit" class="primary-btn" id="submit-btn">Submit</button>
+          <input id="challenge-input" type="text" inputmode="decimal" autocomplete="off" />
+          <button class="primary-btn" type="submit">Submit</button>
         </div>
       </form>
-
-      <div class="feedback" id="feedback" data-state="" aria-hidden="true">
-        <span class="feedback-mark" id="feedback-mark"></span>
-        <span id="feedback-text"></span>
-      </div>
-
-      <div class="play-actions">
-        <button type="button" class="ghost-btn" id="restart-btn">Restart</button>
-        <button type="button" class="ghost-btn" id="setup-btn">Change setup</button>
-      </div>
+      <p class="feedback" id="challenge-feedback"></p>
+      <button type="button" class="ghost-btn" id="challenge-start">Start daily challenge</button>
     </section>
 
-    <section id="result-screen" class="panel" hidden aria-labelledby="result-title">
-      <h2 id="result-title">Quiz Complete</h2>
-      <p id="result-summary"></p>
-      <section class="stats-block" aria-labelledby="stats-title">
-        <h3 id="stats-title">Performance by operation</h3>
-        <ul id="stats-list" class="stats-list"></ul>
-      </section>
-      <div class="play-actions">
-        <button type="button" class="primary-btn" id="play-again-btn">Play again</button>
-        <button type="button" class="ghost-btn" id="result-setup-btn">Change setup</button>
-      </div>
+    <section>
+      <h2>Learning journey</h2>
+      <div id="lesson-list"></div>
     </section>
+
+    <section class="panel" id="lesson-practice" hidden>
+      <h2 id="lesson-practice-title">Lesson practice</h2>
+      <p class="lede" id="lesson-practice-meta"></p>
+      <p class="problem" id="lesson-problem">0 + 0</p>
+      <form id="lesson-form" class="answer-form">
+        <label for="lesson-input">Your answer</label>
+        <div class="answer-row">
+          <input id="lesson-input" type="text" inputmode="decimal" autocomplete="off" />
+          <button class="primary-btn" type="submit">Submit</button>
+        </div>
+      </form>
+      <p class="feedback" id="lesson-feedback"></p>
+      <button type="button" class="ghost-btn" id="lesson-exit">Back to lessons</button>
+    </section>
+
+    <section class="panel">
+      <h2>Achievements</h2>
+      <ul class="stats-list" id="achievement-list"></ul>
+    </section>
+
+    <p class="lede"><a href="pdfs.html">Math Learning PDFs</a></p>
   </main>
 
-  <footer>
-    <p>Answers are checked instantly. Division questions use whole-number results.</p>
-  </footer>
-
   <script src="learn-store.js"></script>
-  <script src="app.js"></script>
+  <script src="learn.js"></script>
 </body>
 </html>
