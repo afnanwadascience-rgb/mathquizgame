@@ -1,101 +1,641 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Learn Math — Math Quiz</title>
-  <meta name="description" content="Learn math step by step with lessons, a daily challenge, score, and streak." />
+
+  <title>Math Quiz — Practice Math Fast</title>
+
+  <meta
+    name="description"
+    content="Practice addition, subtraction, multiplication, and division with Math Quiz."
+  />
+
   <link rel="stylesheet" href="style.css" />
-  <script>document.documentElement.setAttribute("data-theme", "light");</script>
+
+  <script>
+    document.documentElement.setAttribute("data-theme", "light");
+  </script>
 </head>
-<body class="learn-page">
+
+<body>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
   <header class="site-header">
     <div class="site-header-inner">
-      <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
-      <nav class="site-nav" aria-label="Primary">
-        <a href="index.html">Home</a>
-        <a href="learn.html" aria-current="page">Learn Math</a>
+
+      <a class="wordmark" href="index.html">
+        Math <span>Quiz</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="learn.html">Learn Math</a>
         <a href="how-to-play.html">How to Play</a>
         <a href="about.html">About</a>
       </nav>
+
     </div>
   </header>
 
-  <section id="welcome-screen" class="welcome-screen">
-    <div class="welcome-math" aria-hidden="true">
-      <span>+</span><span>÷</span><span>π</span><span>×</span><span>√</span>
-      <span>12</span><span>−</span><span>=</span><span>7</span><span>△</span>
-    </div>
-    <div class="welcome-inner">
-      <p class="welcome-brand">Math <span>Quiz</span></p>
-      <h1>Start Your Math Journey</h1>
-      <p class="welcome-copy">Build your skills step by step with practice, challenges, and guided lessons.</p>
-      <button type="button" class="primary-btn welcome-btn" id="start-learning">Start Your Math Journey</button>
-      <p class="welcome-kicker">Learn • Practice • Improve</p>
-    </div>
-  </section>
 
-  <main id="learn-app" class="page-wrap" hidden>
-    <section class="panel">
-      <h1 id="learn-heading">Continue Learning</h1>
-      <p class="lede" id="learn-copy">Pick up where you left off. Your score and streak stay on this device.</p>
-      <p class="continue-card" id="continue-card"></p>
-      <button type="button" class="primary-btn" id="continue-learning">Continue Learning</button>
-    </section>
+  <!-- =====================================================
+       SETUP SCREEN
+       app.js requires all elements below.
+       ===================================================== -->
 
-    <section class="stats-grid" aria-label="Learning stats">
-      <article class="stat-card"><h2>Math Score</h2><p id="stat-score">0</p></article>
-      <article class="stat-card"><h2>Day Streak</h2><p id="stat-streak">0 days</p></article>
-      <article class="stat-card"><h2>Learning Progress</h2><p id="stat-progress">0%</p></article>
-      <article class="stat-card"><h2>Lessons Completed</h2><p id="stat-lessons">0 / 10</p></article>
-      <article class="stat-card"><h2>Current Level</h2><p id="stat-level">New learner</p></article>
-      <article class="stat-card"><h2>Today's Goal</h2><p id="stat-goal">0 / 5</p></article>
-    </section>
+  <main>
 
-    <section class="panel" id="challenge-panel">
-      <h2>Daily Math Challenge</h2>
-      <p class="lede" id="challenge-status">5 mixed questions. Completing it counts toward today’s goal.</p>
-      <p class="problem" id="challenge-problem" hidden>0 + 0</p>
-      <form id="challenge-form" class="answer-form" hidden>
-        <label for="challenge-input">Your answer</label>
-        <div class="answer-row">
-          <input id="challenge-input" type="text" inputmode="decimal" autocomplete="off" />
-          <button class="primary-btn" type="submit">Submit</button>
+    <section id="setup-screen" class="page-wrap">
+
+      <div class="panel">
+
+        <h1>Math Quiz</h1>
+
+        <p class="lede">
+          Test your speed and accuracy with customizable math questions.
+        </p>
+
+
+        <!-- DAILY INDICATOR -->
+
+        <p
+          id="daily-indicator"
+          class="lede"
+          aria-live="polite"
+        >
+          Daily streak: 0
+        </p>
+
+
+        <!-- =================================================
+             DIFFICULTY
+             ================================================= -->
+
+        <fieldset>
+          <legend>Difficulty</legend>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="easy"
+              checked
+            />
+            Easy
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="medium"
+            />
+            Medium
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="hard"
+            />
+            Hard
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="custom"
+            />
+            Custom
+          </label>
+
+        </fieldset>
+
+
+        <!-- =================================================
+             CUSTOM RANGE
+             ================================================= -->
+
+        <div id="custom-range" hidden>
+
+          <div>
+            <label for="min-number">
+              Minimum number
+            </label>
+
+            <input
+              id="min-number"
+              type="number"
+              min="0"
+              max="10000"
+              value="1"
+            />
+          </div>
+
+          <div>
+            <label for="max-number">
+              Maximum number
+            </label>
+
+            <input
+              id="max-number"
+              type="number"
+              min="1"
+              max="10000"
+              value="100"
+            />
+          </div>
+
+          <p
+            id="range-error"
+            class="feedback"
+            aria-live="polite"
+          ></p>
+
         </div>
-      </form>
-      <p class="feedback" id="challenge-feedback"></p>
-      <button type="button" class="ghost-btn" id="challenge-start">Start daily challenge</button>
-    </section>
 
-    <section>
-      <h2>Learning journey</h2>
-      <div id="lesson-list"></div>
-    </section>
 
-    <section class="panel" id="lesson-practice" hidden>
-      <h2 id="lesson-practice-title">Lesson practice</h2>
-      <p class="lede" id="lesson-practice-meta"></p>
-      <p class="problem" id="lesson-problem">0 + 0</p>
-      <form id="lesson-form" class="answer-form">
-        <label for="lesson-input">Your answer</label>
-        <div class="answer-row">
-          <input id="lesson-input" type="text" inputmode="decimal" autocomplete="off" />
-          <button class="primary-btn" type="submit">Submit</button>
+        <!-- =================================================
+             OPERATION
+             ================================================= -->
+
+        <fieldset>
+          <legend>Operation</legend>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="mixed"
+              checked
+            />
+            Mixed
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="+"
+            />
+            Addition
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="-"
+            />
+            Subtraction
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="*"
+            />
+            Multiplication
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="/"
+            />
+            Division
+          </label>
+
+        </fieldset>
+
+
+        <!-- =================================================
+             MODE
+             ================================================= -->
+
+        <fieldset>
+          <legend>Game mode</legend>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="timed"
+              checked
+            />
+            Timed
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="endless"
+            />
+            Endless
+          </label>
+
+        </fieldset>
+
+
+        <!-- =================================================
+             DURATION
+             ================================================= -->
+
+        <div id="duration-row">
+
+          <fieldset>
+            <legend>Time limit</legend>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="30"
+              />
+              30 seconds
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="60"
+                checked
+              />
+              60 seconds
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="120"
+              />
+              120 seconds
+            </label>
+
+          </fieldset>
+
         </div>
-      </form>
-      <p class="feedback" id="lesson-feedback"></p>
-      <button type="button" class="ghost-btn" id="lesson-exit">Back to lessons</button>
+
+
+        <!-- =================================================
+             THEME
+             ================================================= -->
+
+        <div>
+
+          <label for="theme-select">
+            Theme
+          </label>
+
+          <select id="theme-select">
+            <option value="system">
+              System
+            </option>
+
+            <option value="light">
+              Light
+            </option>
+
+            <option value="dark">
+              Dark
+            </option>
+          </select>
+
+        </div>
+
+
+        <!-- =================================================
+             START
+             ================================================= -->
+
+        <button
+          type="button"
+          class="primary-btn"
+          id="start-btn"
+        >
+          Start Quiz
+        </button>
+
+      </div>
+
+
+      <!-- =================================================
+           LEARN LINK
+           ================================================= -->
+
+      <section class="panel">
+
+        <h2>Want to improve your skills?</h2>
+
+        <p class="lede">
+          Practice step by step with guided math lessons,
+          challenges, streaks, and achievements.
+        </p>
+
+        <a
+          class="primary-btn"
+          href="learn.html"
+        >
+          Learn Math
+        </a>
+
+      </section>
+
     </section>
 
-    <section class="panel">
-      <h2>Achievements</h2>
-      <ul class="stats-list" id="achievement-list"></ul>
+
+    <!-- =====================================================
+         PLAY SCREEN
+         ===================================================== -->
+
+    <section
+      id="play-screen"
+      class="page-wrap"
+      hidden
+    >
+
+      <div class="panel">
+
+        <!-- GAME HEADER -->
+
+        <div class="quiz-hud">
+
+          <div>
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+
+          <div>
+            <span>Streak</span>
+            <strong id="streak-display">
+              🔥 Streak: 0
+            </strong>
+          </div>
+
+          <div>
+            <span>Multiplier</span>
+            <strong id="multiplier">1×</strong>
+          </div>
+
+        </div>
+
+
+        <!-- MODE -->
+
+        <p
+          id="mode-badge"
+          class="lede"
+        >
+          Timed · 60s
+        </p>
+
+
+        <!-- TIMER -->
+
+        <div id="timer-wrap">
+
+          <div class="timer-label">
+            <span>Time</span>
+            <strong id="time-label">60s</strong>
+          </div>
+
+          <div
+            id="progress-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="100"
+          >
+            <div id="progress-fill"></div>
+          </div>
+
+        </div>
+
+
+        <!-- ENDLESS MISSES -->
+
+        <p
+          id="misses-label"
+          class="lede"
+          hidden
+        >
+          Misses: 0 / 3
+        </p>
+
+
+        <!-- QUESTION -->
+
+        <div class="panel">
+
+          <p
+            id="problem"
+            class="problem"
+          >
+            1 + 1 =
+          </p>
+
+
+          <!-- ANSWER -->
+
+          <form
+            id="answer-form"
+            class="answer-form"
+          >
+
+            <label for="answer-input">
+              Your answer
+            </label>
+
+            <div class="answer-row">
+
+              <input
+                id="answer-input"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                required
+              />
+
+              <button
+                class="primary-btn"
+                type="submit"
+              >
+                Submit
+              </button>
+
+            </div>
+
+          </form>
+
+
+          <!-- FEEDBACK -->
+
+          <div
+            id="feedback"
+            class="feedback"
+            aria-hidden="true"
+          >
+
+            <span id="feedback-mark"></span>
+
+            <span id="feedback-text"></span>
+
+          </div>
+
+          <div
+            id="feedback-live"
+            class="visually-hidden"
+            aria-live="polite"
+          ></div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="restart-btn"
+          >
+            Restart
+          </button>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="setup-btn"
+          >
+            Change Settings
+          </button>
+
+        </div>
+
+      </div>
+
     </section>
 
-    <p class="lede"><a href="pdfs.html">Math Learning PDFs</a></p>
+
+    <!-- =====================================================
+         RESULT SCREEN
+         ===================================================== -->
+
+    <section
+      id="result-screen"
+      class="page-wrap"
+      hidden
+    >
+
+      <div class="panel">
+
+        <h1>Quiz Complete</h1>
+
+        <p
+          id="result-summary"
+          class="lede"
+        >
+          Your results will appear here.
+        </p>
+
+
+        <!-- STATISTICS -->
+
+        <h2>Your Statistics</h2>
+
+        <ul
+          id="stats-list"
+          class="stats-list"
+        >
+          <li>
+            <span>Addition</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Subtraction</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Multiplication</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Division</span>
+            <span>No data yet</span>
+          </li>
+        </ul>
+
+
+        <!-- ACTIONS -->
+
+        <div>
+
+          <button
+            type="button"
+            class="primary-btn"
+            id="play-again-btn"
+          >
+            Play Again
+          </button>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="result-setup-btn"
+          >
+            Change Settings
+          </button>
+
+        </div>
+
+
+        <!-- LEARN -->
+
+        <p class="lede">
+
+          <a href="learn.html">
+            Continue learning with Learn Math →
+          </a>
+
+        </p>
+
+      </div>
+
+    </section>
+
   </main>
 
+
+  <!-- =====================================================
+       SCRIPTS
+       =====================================================
+
+       learn-store.js is loaded first because app.js can
+       update learning progress through window.MQGLearn.
+
+       app.js is loaded last because it controls the
+       main Math Quiz interface.
+       ===================================================== -->
+
   <script src="learn-store.js"></script>
-  <script src="learn.js"></script>
+  <script src="app.js"></script>
+
 </body>
 </html>
+```
