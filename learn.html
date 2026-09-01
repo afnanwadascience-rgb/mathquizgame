@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Learn Math — Math Quiz</title>
+  <meta name="description" content="Learn math step by step with lessons, a daily challenge, score, and streak." />
+  <link rel="stylesheet" href="style.css" />
+  <script>document.documentElement.setAttribute("data-theme", "light");</script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="learn.html" aria-current="page">Learn Math</a>
+        <a href="how-to-play.html">How to Play</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <section class="panel">
+      <h1 id="learn-heading">Start Your Math Learning Journey</h1>
+      <p class="lede" id="learn-copy">Learn mathematics step by step with short lessons and a daily challenge. Your score and streak stay on this device.</p>
+      <p class="continue-card" id="continue-card" hidden></p>
+      <button type="button" class="primary-btn" id="start-learning">Start Learning</button>
+    </section>
+
+    <section class="stats-grid" aria-label="Learning stats">
+      <article class="stat-card"><h2>Math Score</h2><p id="stat-score">0</p></article>
+      <article class="stat-card"><h2>Day Streak</h2><p id="stat-streak">0 days</p></article>
+      <article class="stat-card"><h2>Learning Progress</h2><p id="stat-progress">0%</p></article>
+      <article class="stat-card"><h2>Lessons Completed</h2><p id="stat-lessons">0 / 10</p></article>
+      <article class="stat-card"><h2>Current Level</h2><p id="stat-level">New learner</p></article>
+      <article class="stat-card"><h2>Today's Goal</h2><p id="stat-goal">0 / 5</p></article>
+    </section>
+
+    <section class="panel" id="challenge-panel">
+      <h2>Daily Math Challenge</h2>
+      <p class="lede" id="challenge-status">5 mixed questions. Completing it counts toward today’s goal.</p>
+      <p class="problem" id="challenge-problem" hidden>0 + 0</p>
+      <form id="challenge-form" class="answer-form" hidden>
+        <label for="challenge-input">Your answer</label>
+        <div class="answer-row">
+          <input id="challenge-input" type="text" inputmode="decimal" autocomplete="off" />
+          <button class="primary-btn" type="submit">Submit</button>
+        </div>
+      </form>
+      <p class="feedback" id="challenge-feedback"></p>
+      <button type="button" class="ghost-btn" id="challenge-start">Start daily challenge</button>
+    </section>
+
+    <section>
+      <h2>Learning journey</h2>
+      <div id="lesson-list"></div>
+    </section>
+
+    <section class="panel" id="lesson-practice" hidden>
+      <h2 id="lesson-practice-title">Lesson practice</h2>
+      <p class="lede" id="lesson-practice-meta"></p>
+      <p class="problem" id="lesson-problem">0 + 0</p>
+      <form id="lesson-form" class="answer-form">
+        <label for="lesson-input">Your answer</label>
+        <div class="answer-row">
+          <input id="lesson-input" type="text" inputmode="decimal" autocomplete="off" />
+          <button class="primary-btn" type="submit">Submit</button>
+        </div>
+      </form>
+      <p class="feedback" id="lesson-feedback"></p>
+      <button type="button" class="ghost-btn" id="lesson-exit">Back to lessons</button>
+    </section>
+
+    <section class="panel">
+      <h2>Achievements</h2>
+      <ul class="stats-list" id="achievement-list"></ul>
+    </section>
+
+    <p class="lede"><a href="pdfs.html">Math Learning PDFs</a></p>
+  </main>
+
+  <script src="learn-store.js"></script>
+  <script src="learn.js"></script>
+</body>
+</html>

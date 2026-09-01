@@ -3,24 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Math Quiz Game — Mental Math Practice</title>
-  <meta name="description" content="Practice mental math with addition, subtraction, multiplication, and division. Choose difficulty, timed or endless mode, and track streaks and accuracy." />
-  <meta name="theme-color" content="#0f172a" />
+  <title>Math Quiz — Free Online Math Quiz Game</title>
+  <meta name="description" content="Practice mental math with addition, subtraction, multiplication, and division." />
+  <meta name="theme-color" content="#2563eb" />
   <link rel="stylesheet" href="style.css" />
-  <script>
-    (function () {
-      try {
-        var saved = localStorage.getItem("mqg-theme");
-        var theme = saved || "system";
-        var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        var resolved = theme === "system" ? (prefersDark ? "dark" : "light") : theme;
-        document.documentElement.setAttribute("data-theme", resolved);
-        document.documentElement.setAttribute("data-theme-pref", theme);
-      } catch (e) {
-        document.documentElement.setAttribute("data-theme", "light");
-      }
-    })();
-  </script>
+  <script>document.documentElement.setAttribute("data-theme", "light");</script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to game</a>
@@ -30,9 +17,8 @@
       <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
       <nav class="site-nav" aria-label="Primary">
         <a href="index.html" aria-current="page">Home</a>
-        <a href="how-to-play.html">How to Play</a>
         <a href="learn.html">Learn Math</a>
-        <a href="pdfs.html">PDFs</a>
+        <a href="how-to-play.html">How to Play</a>
         <a href="about.html">About</a>
       </nav>
     </div>
@@ -40,7 +26,7 @@
 
   <header class="topbar">
     <div class="brand">
-      <h1>Math Quiz Game</h1>
+      <h1>Math Quiz</h1>
       <p class="tagline">Mental math practice</p>
     </div>
     <div class="top-actions">
@@ -48,8 +34,8 @@
       <div class="theme-wrap">
         <label for="theme-select">Theme</label>
         <select id="theme-select" aria-label="Color theme">
+          <option value="light" selected>Light</option>
           <option value="system">System</option>
-          <option value="light">Light</option>
           <option value="dark">Dark</option>
         </select>
       </div>
@@ -58,7 +44,7 @@
 
   <main id="main">
     <section id="setup-screen" class="panel" aria-labelledby="setup-title">
-      <h2 id="setup-title">Game setup</h2>
+      <h2 id="setup-title">Start the Quiz</h2>
       <p class="lede">Choose a difficulty, operation, and mode, then start. Timed rounds use a countdown. Endless mode ends after 3 misses.</p>
 
       <fieldset class="choice-group">
@@ -100,15 +86,15 @@
         </div>
       </fieldset>
 
-      <button type="button" class="primary-btn" id="start-btn">Start quiz</button>
+      <button type="button" class="primary-btn" id="start-btn">Start Quiz</button>
     </section>
 
     <section id="play-screen" class="panel play-panel" hidden aria-labelledby="problem">
       <div class="status-row">
         <p class="mode-badge" id="mode-badge">Timed · 60s</p>
         <p class="stat">Score <strong id="score">0</strong></p>
-        <p class="stat streak" id="streak-display">🔥 Streak: 0</p>
-        <p class="stat">Combo <strong id="multiplier">1×</strong></p>
+        <p class="stat streak" id="streak-display">Streak: 0</p>
+        <p class="stat">Combo <strong id="multiplier">1x</strong></p>
       </div>
 
       <div id="timer-wrap" class="timer-wrap">
@@ -145,7 +131,7 @@
     </section>
 
     <section id="result-screen" class="panel" hidden aria-labelledby="result-title">
-      <h2 id="result-title">Round complete</h2>
+      <h2 id="result-title">Quiz Complete</h2>
       <p id="result-summary"></p>
       <section class="stats-block" aria-labelledby="stats-title">
         <h3 id="stats-title">Performance by operation</h3>

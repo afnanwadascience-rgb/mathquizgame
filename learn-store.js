@@ -1,7 +1,8 @@
 (function (global) {
   "use strict";
 
-  var KEY = "mqg-learn";
+  var LEARN_KEY = "mqg-learn";
+  var DAILY_KEY = "mqg-daily";
 
   var LESSONS = [
     { id: "addition", title: "Addition", description: "Add whole numbers quickly and accurately.", difficulty: "Easy", ops: ["+"] },
@@ -69,22 +70,37 @@
     };
   }
 
-  function load() {
+  function loadDaily() {
     try {
-      var raw = localStorage.getItem(KEY);
-      var data = raw ? JSON.parse(raw) : empty();
-      return Object.assign(empty(), data);
+      return Object.assign({ lastPlayed: "", streak: 0 }, JSON.parse(localStorage.getItem(DAILY_KEY) || "{}"));
     } catch (e) {
-      return empty();
+      return { lastPlayed: "", streak: 0 };
     }
   }
 
-  function save(state) {
-    localStorage.setItem(KEY, JSON.stringify(state));
-    return state;
+  function saveDaily(daily) {
+    localStorage.setItem(DAILY_KEY, JSON.stringify(daily));
   }
 
-  function refreshDailyCounters(state) {
+  function touchStreak() {
+    var daily = loadDaily();
+    var today = todayStamp();
+    if (daily.lastPlayed !== today) {
+      daily.streak = daily.lastPlayed === yesterdayStamp() ? (daily.streak || 0) + 1 : 1;
+      daily.lastPlayed = today;
+      saveDaily(daily);
+    }
+    return daily.streak || 0;
+  }
+
+  function load() {
+    var state;
+    try {
+      state = Object.assign(empty(), JSON.parse(localStorage.getItem(LEARN_KEY) || "{}"));
+    } catch (e) {
+      state = empty();
+    }
+    state.streak = loadDaily().streak || 0;
     var today = todayStamp();
     if (state.dailyGoalDate !== today) {
       state.dailyGoal = 0;
@@ -98,6 +114,12 @@
     return state;
   }
 
+  function save(state) {
+    state.streak = loadDaily().streak || state.streak;
+    localStorage.setItem(LEARN_KEY, JSON.stringify(state));
+    return state;
+  }
+
   function checkAchievements(state) {
     ACHIEVEMENTS.forEach(function (item) {
       if (state.unlockedAchievements.indexOf(item.id) === -1 && item.test(state)) {
@@ -108,32 +130,23 @@
   }
 
   function noteActivity(state, scoreGain, activityCount) {
-    var today = todayStamp();
-    if (state.lastLearningDate !== today) {
-      if (state.lastLearningDate === yesterdayStamp()) state.streak += 1;
-      else state.streak = 1;
-      state.lastLearningDate = today;
-    }
+    state.streak = touchStreak();
     if (scoreGain) state.score += scoreGain;
-    if (activityCount) {
-      refreshDailyCounters(state);
-      state.dailyGoal = Math.min(state.dailyGoalTarget, state.dailyGoal + activityCount);
-    }
+    if (activityCount) state.dailyGoal = Math.min(state.dailyGoalTarget, state.dailyGoal + activityCount);
     return checkAchievements(state);
   }
 
-  var api = {
+  global.MQGLearn = {
     LESSONS: LESSONS,
     PDFS: PDFS,
     ACHIEVEMENTS: ACHIEVEMENTS,
-    load: function () {
-      return refreshDailyCounters(load());
-    },
+    load: load,
     startJourney: function () {
-      var state = refreshDailyCounters(load());
+      var state = load();
       state.started = true;
       if (!state.currentLesson) state.currentLesson = LESSONS[0].id;
-      return save(noteActivity(state, 0, 0));
+      state.streak = touchStreak();
+      return save(state);
     },
     setCurrentLesson: function (id) {
       var state = load();
@@ -142,12 +155,12 @@
       return save(state);
     },
     addCorrect: function (points) {
-      var state = refreshDailyCounters(load());
+      var state = load();
       state.correctAnswers += 1;
       return save(noteActivity(state, points || 5, 0));
     },
     completeLesson: function (id) {
-      var state = refreshDailyCounters(load());
+      var state = load();
       if (state.completedLessons.indexOf(id) === -1) {
         state.completedLessons.push(id);
         state.lessonProgress[id] = 5;
@@ -164,13 +177,10 @@
       return save(state);
     },
     completePdf: function (id) {
-      var state = refreshDailyCounters(load());
+      var state = load();
       if (state.completedPdfs.indexOf(id) === -1) {
         state.completedPdfs.push(id);
         state.pdfProgress[id] = 100;
-        if (id === "mental-math-guide" && state.completedLessons.indexOf("mental-math") === -1) {
-          state.lessonProgress["mental-math"] = Math.max(state.lessonProgress["mental-math"] || 0, 3);
-        }
         save(noteActivity(state, 60, 1));
       }
       return load();
@@ -178,10 +188,11 @@
     markPdfStarted: function (id) {
       var state = load();
       if (!state.pdfProgress[id]) state.pdfProgress[id] = 10;
-      return save(noteActivity(state, 0, 0));
+      state.streak = touchStreak();
+      return save(state);
     },
     completeDailyChallenge: function (correctCount) {
-      var state = refreshDailyCounters(load());
+      var state = load();
       state.dailyChallengeCorrect = correctCount;
       if (!state.dailyChallengeDone) {
         state.dailyChallengeDone = true;
@@ -191,10 +202,9 @@
     },
     nextLesson: function (state) {
       state = state || load();
-      var unfinished = LESSONS.find(function (lesson) {
+      return LESSONS.find(function (lesson) {
         return state.completedLessons.indexOf(lesson.id) === -1;
-      });
-      return unfinished || LESSONS[LESSONS.length - 1];
+      }) || LESSONS[LESSONS.length - 1];
     },
     progressPercent: function (state) {
       state = state || load();
@@ -211,6 +221,4 @@
       return "New learner";
     }
   };
-
-  global.MQGLearn = api;
 })(window);
