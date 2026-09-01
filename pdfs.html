@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Math Learning PDFs — Math Quiz</title>
+  <meta name="description" content="Open the Math Quiz project PDF and track whether you have completed it." />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("mqg-theme") || "system";
+        var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "system" ? (dark ? "dark" : "light") : saved);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="how-to-play.html">How to Play</a>
+        <a href="learn.html">Learn Math</a>
+        <a href="pdfs.html" aria-current="page">PDFs</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <section class="panel">
+      <h1>Math Learning PDFs</h1>
+      <p class="lede">Only PDFs that exist in this project are listed. The file opens in your browser. Book text is not copied onto this page.</p>
+    </section>
+    <div id="pdf-list"></div>
+  </main>
+
+  <script src="learn-store.js"></script>
+  <script src="pdfs.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>How to Play — Math Quiz</title>
+  <meta name="description" content="How to play Math Quiz: start, solve 10 timed problems, and see your score." />
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("mqg-theme") || "system";
+        var dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        document.documentElement.setAttribute("data-theme", saved === "system" ? (dark ? "dark" : "light") : saved);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="site-header-inner">
+      <a class="wordmark" href="index.html">Math <span>Quiz</span></a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="how-to-play.html" aria-current="page">How to Play</a>
+        <a href="learn.html">Learn Math</a>
+        <a href="pdfs.html">PDFs</a>
+        <a href="about.html">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <h1 class="page-title">How to Play</h1>
+    <div class="step-row">
+      <article class="step-card">
+        <span class="step-num">1</span>
+        <h2>Start the Quiz</h2>
+        <p>Press Start Quiz to begin.</p>
+      </article>
+      <article class="step-card">
+        <span class="step-num">2</span>
+        <h2>Solve the Problem</h2>
+        <p>Enter your answer before the timer ends.</p>
+      </article>
+      <article class="step-card">
+        <span class="step-num">3</span>
+        <h2>See Your Score</h2>
+        <p>Finish the round and review your result.</p>
+      </article>
+    </div>
+
+    <section class="panel">
+      <h2>Free Online Math Quiz</h2>
+      <p class="lede">Practice arithmetic with timed challenges. The quiz uses addition, subtraction, multiplication, and division.</p>
+      <h2>How to Practice Math With This Quiz</h2>
+      <p class="lede">Choose your settings on Home, start a quiz, and type each answer. You get instant feedback and a score at the end.</p>
+      <a class="primary-btn" href="index.html">Start Quiz</a>
+    </section>
+  </main>
+</body>
+</html>

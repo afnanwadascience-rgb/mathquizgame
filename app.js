@@ -210,7 +210,7 @@
     try {
       localStorage.setItem(STORAGE_KEYS.theme, pref);
     } catch (e) {}
-    els.themeSelect.value = pref;
+    if (els.themeSelect) els.themeSelect.value = pref;
   }
 
   function readSetupFromDom() {
@@ -385,6 +385,7 @@
     readSetupFromDom();
     if (!validateRange()) return;
     persistSettings();
+    if (window.MQGLearn) window.MQGLearn.startJourney();
     updateDailyStreak();
     renderDaily();
     state.status = "playing";
@@ -401,7 +402,6 @@
   }
 
   function restartGame() {
-    if (state.status === "setup") return startGame();
     startGame();
   }
 
@@ -430,6 +430,7 @@
       var multi = multiplierFor(state.streak);
       state.score += multi;
       state.sessionStats[op].correct += 1;
+      if (window.MQGLearn) window.MQGLearn.addCorrect(multi);
       setFeedback("correct", "Correct · +" + multi, "Correct. Score plus " + multi);
     } else {
       state.streak = 0;
