@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Math Quiz — Practice Math Fast</title>
+
+  <meta
+    name="description"
+    content="Practice addition, subtraction, multiplication, and division with Math Quiz."
+  />
+
+  <link rel="stylesheet" href="style.css" />
+
+  <script>
+    document.documentElement.setAttribute("data-theme", "light");
+  </script>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       HEADER
+       ===================================================== -->
+
+  <header class="site-header">
+    <div class="site-header-inner">
+
+      <a class="wordmark" href="index.html">
+        Math <span>Quiz</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="learn.html">Learn Math</a>
+        <a href="how-to-play.html">How to Play</a>
+        <a href="about.html">About</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <!-- =====================================================
+       WELCOME SCREEN
+       THIS IS THE FIRST SCREEN THE USER SEES
+       ===================================================== -->
+
+  <section id="welcome-screen" class="welcome-screen">
+
+    <div class="welcome-math" aria-hidden="true">
+      <span>+</span>
+      <span>÷</span>
+      <span>π</span>
+      <span>×</span>
+      <span>√</span>
+      <span>12</span>
+      <span>−</span>
+      <span>=</span>
+      <span>7</span>
+      <span>△</span>
+    </div>
+
+    <div class="welcome-inner">
+
+      <p class="welcome-brand">
+        Math <span>Quiz</span>
+      </p>
+
+      <h1>
+        Start Your Math Journey
+      </h1>
+
+      <p class="welcome-copy">
+        Build your math skills with fast practice,
+        customizable quizzes, and guided learning.
+      </p>
+
+      <button
+        type="button"
+        class="primary-btn welcome-btn"
+        id="start-learning"
+      >
+        Start Your Math Journey
+      </button>
+
+      <p class="welcome-kicker">
+        Learn • Practice • Improve
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       MAIN QUIZ APPLICATION
+       ===================================================== -->
+
+  <main>
+
+
+    <!-- ===================================================
+         QUIZ SETUP SCREEN
+         Hidden until Start Your Math Journey is clicked.
+         =================================================== -->
+
+    <section
+      id="setup-screen"
+      class="page-wrap"
+      hidden
+    >
+
+      <div class="panel">
+
+        <h1>
+          Math Quiz
+        </h1>
+
+        <p class="lede">
+          Test your speed and accuracy with customizable math questions.
+        </p>
+
+        <p
+          id="daily-indicator"
+          class="lede"
+          aria-live="polite"
+        >
+          Daily streak: 0
+        </p>
+
+
+        <!-- DIFFICULTY -->
+
+        <fieldset>
+
+          <legend>
+            Difficulty
+          </legend>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="easy"
+              checked
+            />
+            Easy
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="medium"
+            />
+            Medium
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="hard"
+            />
+            Hard
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="difficulty"
+              value="custom"
+            />
+            Custom
+          </label>
+
+        </fieldset>
+
+
+        <!-- CUSTOM RANGE -->
+
+        <div
+          id="custom-range"
+          hidden
+        >
+
+          <label for="min-number">
+            Minimum number
+          </label>
+
+          <input
+            id="min-number"
+            type="number"
+            min="0"
+            max="10000"
+            value="1"
+          />
+
+          <label for="max-number">
+            Maximum number
+          </label>
+
+          <input
+            id="max-number"
+            type="number"
+            min="1"
+            max="10000"
+            value="10"
+          />
+
+          <p
+            id="range-error"
+            class="feedback"
+            aria-live="polite"
+          ></p>
+
+        </div>
+
+
+        <!-- OPERATION -->
+
+        <fieldset>
+
+          <legend>
+            Operation
+          </legend>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="mixed"
+              checked
+            />
+            Mixed
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="+"
+            />
+            Addition
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="-"
+            />
+            Subtraction
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="*"
+            />
+            Multiplication
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="operation"
+              value="/"
+            />
+            Division
+          </label>
+
+        </fieldset>
+
+
+        <!-- GAME MODE -->
+
+        <fieldset>
+
+          <legend>
+            Game mode
+          </legend>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="timed"
+              checked
+            />
+            Timed
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              value="endless"
+            />
+            Endless
+          </label>
+
+        </fieldset>
+
+
+        <!-- TIME LIMIT -->
+
+        <div id="duration-row">
+
+          <fieldset>
+
+            <legend>
+              Time limit
+            </legend>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="30"
+              />
+              30 seconds
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="60"
+                checked
+              />
+              60 seconds
+            </label>
+
+            <label>
+              <input
+                type="radio"
+                name="duration"
+                value="120"
+              />
+              120 seconds
+            </label>
+
+          </fieldset>
+
+        </div>
+
+
+        <!-- THEME -->
+
+        <div>
+
+          <label for="theme-select">
+            Theme
+          </label>
+
+          <select id="theme-select">
+
+            <option value="system">
+              System
+            </option>
+
+            <option value="light">
+              Light
+            </option>
+
+            <option value="dark">
+              Dark
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- START QUIZ -->
+
+        <button
+          type="button"
+          class="primary-btn"
+          id="start-btn"
+        >
+          Start Quiz
+        </button>
+
+      </div>
+
+
+      <!-- LEARN LINK -->
+
+      <section class="panel">
+
+        <h2>
+          Want to improve your skills?
+        </h2>
+
+        <p class="lede">
+          Learn math step by step with guided lessons,
+          challenges, streaks, and achievements.
+        </p>
+
+        <a
+          class="primary-btn"
+          href="learn.html"
+        >
+          Learn Math
+        </a>
+
+      </section>
+
+    </section>
+
+
+    <!-- ===================================================
+         PLAY SCREEN
+         =================================================== -->
+
+    <section
+      id="play-screen"
+      class="page-wrap"
+      hidden
+    >
+
+      <div class="panel">
+
+        <div class="quiz-hud">
+
+          <div>
+            <span>Score</span>
+            <strong id="score">0</strong>
+          </div>
+
+          <div>
+            <span>Streak</span>
+            <strong id="streak-display">
+              🔥 Streak: 0
+            </strong>
+          </div>
+
+          <div>
+            <span>Multiplier</span>
+            <strong id="multiplier">
+              1×
+            </strong>
+          </div>
+
+        </div>
+
+
+        <p
+          id="mode-badge"
+          class="lede"
+        >
+          Timed · 60s
+        </p>
+
+
+        <!-- TIMER -->
+
+        <div id="timer-wrap">
+
+          <div class="timer-label">
+
+            <span>
+              Time
+            </span>
+
+            <strong id="time-label">
+              60s
+            </strong>
+
+          </div>
+
+          <div
+            id="progress-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="100"
+          >
+
+            <div id="progress-fill"></div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ENDLESS MISSES -->
+
+        <p
+          id="misses-label"
+          class="lede"
+          hidden
+        >
+          Misses: 0 / 3
+        </p>
+
+
+        <!-- QUESTION -->
+
+        <div class="panel">
+
+          <p
+            id="problem"
+            class="problem"
+          >
+            1 + 1 =
+          </p>
+
+
+          <!-- ANSWER -->
+
+          <form
+            id="answer-form"
+            class="answer-form"
+          >
+
+            <label for="answer-input">
+              Your answer
+            </label>
+
+            <div class="answer-row">
+
+              <input
+                id="answer-input"
+                type="text"
+                inputmode="decimal"
+                autocomplete="off"
+                required
+              />
+
+              <button
+                class="primary-btn"
+                type="submit"
+              >
+                Submit
+              </button>
+
+            </div>
+
+          </form>
+
+
+          <!-- FEEDBACK -->
+
+          <div
+            id="feedback"
+            class="feedback"
+            aria-hidden="true"
+          >
+
+            <span id="feedback-mark"></span>
+
+            <span id="feedback-text"></span>
+
+          </div>
+
+          <div
+            id="feedback-live"
+            class="visually-hidden"
+            aria-live="polite"
+          ></div>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="restart-btn"
+          >
+            Restart
+          </button>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="setup-btn"
+          >
+            Change Settings
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ===================================================
+         RESULT SCREEN
+         =================================================== -->
+
+    <section
+      id="result-screen"
+      class="page-wrap"
+      hidden
+    >
+
+      <div class="panel">
+
+        <h1>
+          Quiz Complete
+        </h1>
+
+        <p
+          id="result-summary"
+          class="lede"
+        >
+          Your results will appear here.
+        </p>
+
+
+        <h2>
+          Your Statistics
+        </h2>
+
+        <ul
+          id="stats-list"
+          class="stats-list"
+        >
+          <li>
+            <span>Addition</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Subtraction</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Multiplication</span>
+            <span>No data yet</span>
+          </li>
+
+          <li>
+            <span>Division</span>
+            <span>No data yet</span>
+          </li>
+        </ul>
+
+
+        <div>
+
+          <button
+            type="button"
+            class="primary-btn"
+            id="play-again-btn"
+          >
+            Play Again
+          </button>
+
+          <button
+            type="button"
+            class="ghost-btn"
+            id="result-setup-btn"
+          >
+            Change Settings
+          </button>
+
+        </div>
+
+
+        <p class="lede">
+
+          <a href="learn.html">
+            Continue learning with Learn Math →
+          </a>
+
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =====================================================
+       SCRIPTS
+       ===================================================== -->
+
+  <script src="learn-store.js"></script>
+
+  <script src="app.js"></script>
+
+
+  <!-- =====================================================
+       WELCOME SCREEN CONTROLLER
+
+       The welcome screen is shown first.
+
+       Clicking "Start Your Math Journey" reveals the
+       existing app.js setup screen.
+
+       This does NOT replace or modify app.js.
+       ===================================================== -->
+
+  <script>
+    (function () {
+      "use strict";
+
+      var welcome = document.getElementById("welcome-screen");
+      var setup = document.getElementById("setup-screen");
+      var startLearning = document.getElementById("start-learning");
+      var startQuiz = document.getElementById("start-btn");
+
+      if (!welcome || !setup || !startLearning) {
+        return;
+      }
+
+      startLearning.addEventListener("click", function () {
+        welcome.hidden = true;
+        setup.hidden = false;
+
+        if (startQuiz) {
+          startQuiz.focus();
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>

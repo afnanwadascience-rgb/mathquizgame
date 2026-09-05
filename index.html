@@ -7,7 +7,7 @@
 
   <meta
     name="description"
-    content="MathQuizGame is a free math practice game with difficulty levels, timed and endless modes, daily streaks, score multipliers, and performance statistics."
+    content="MathQuizGame - Free math practice with difficulty levels, daily streaks, timed and endless modes, score multipliers, and statistics."
   >
 
   <meta
@@ -24,38 +24,23 @@
   <link rel="stylesheet" href="style.css">
 
   <style>
-    /* =========================================================
-       MathQuizGame - interface styles
-       app.js is NOT changed.
-       ========================================================= */
+    /* =====================================================
+       WHITE UI
+       ===================================================== */
 
     :root {
-      --bg: #f5f7fb;
+      --bg: #ffffff;
       --surface: #ffffff;
-      --surface-2: #eef2f7;
+      --surface-2: #f8fafc;
       --text: #172033;
       --muted: #667085;
-      --border: #d9e0ea;
+      --border: #e2e8f0;
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --success: #15803d;
       --danger: #dc2626;
-      --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      --shadow: 0 8px 25px rgba(15, 23, 42, 0.06);
       --radius: 16px;
-    }
-
-    html[data-theme="dark"] {
-      --bg: #0f172a;
-      --surface: #182235;
-      --surface-2: #202c40;
-      --text: #f1f5f9;
-      --muted: #aab6c8;
-      --border: #334155;
-      --primary: #60a5fa;
-      --primary-hover: #93c5fd;
-      --success: #4ade80;
-      --danger: #f87171;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     }
 
     * {
@@ -64,12 +49,13 @@
 
     html {
       scroll-behavior: smooth;
+      background: #ffffff;
     }
 
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background: #ffffff;
       color: var(--text);
       font-family:
         Inter,
@@ -100,9 +86,13 @@
       margin: 0 auto;
     }
 
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
     .site-header {
+      background: #ffffff;
       border-bottom: 1px solid var(--border);
-      background: var(--surface);
       position: sticky;
       top: 0;
       z-index: 20;
@@ -119,8 +109,9 @@
     .logo {
       text-decoration: none;
       color: var(--text);
-      font-size: 1.2rem;
+      font-size: 1.25rem;
       font-weight: 800;
+      white-space: nowrap;
     }
 
     .nav {
@@ -140,7 +131,12 @@
       color: var(--primary);
     }
 
+    /* =====================================================
+       MAIN
+       ===================================================== */
+
     main {
+      background: #ffffff;
       padding: 40px 0 60px;
     }
 
@@ -148,28 +144,37 @@
       width: 100%;
     }
 
+    /* =====================================================
+       HERO
+       ===================================================== */
+
     .hero {
       text-align: center;
-      padding: 30px 0 20px;
+      padding: 25px 0 20px;
     }
 
     .hero h1 {
-      margin: 0 0 10px;
-      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin: 0 0 12px;
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
       line-height: 1.1;
     }
 
     .hero p {
-      margin: 0 auto;
       max-width: 700px;
+      margin: 0 auto;
       color: var(--muted);
+      font-size: 1.05rem;
     }
 
+    /* =====================================================
+       DAILY STREAK
+       ===================================================== */
+
     .daily-card {
-      margin: 24px auto;
       max-width: 650px;
+      margin: 25px auto;
       padding: 18px 22px;
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -182,8 +187,12 @@
       font-size: 1.1rem;
     }
 
+    /* =====================================================
+       PANELS
+       ===================================================== */
+
     .panel {
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
@@ -191,8 +200,7 @@
       margin: 24px auto;
     }
 
-    .panel h2,
-    .panel h3 {
+    .panel h2 {
       margin-top: 0;
     }
 
@@ -201,12 +209,17 @@
       margin-top: -8px;
     }
 
+    /* =====================================================
+       SETTINGS
+       ===================================================== */
+
     .option-group {
-      margin: 26px 0;
+      border: 0;
+      padding: 0;
+      margin: 28px 0;
     }
 
-    .option-group > legend,
-    .group-title {
+    .option-group legend {
       font-size: 1.05rem;
       font-weight: 800;
       margin-bottom: 12px;
@@ -214,7 +227,7 @@
 
     .option-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
       gap: 12px;
     }
 
@@ -230,10 +243,10 @@
 
     .option label {
       display: block;
-      padding: 15px;
+      padding: 15px 12px;
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: var(--surface-2);
+      background: #ffffff;
       text-align: center;
       font-weight: 700;
       cursor: pointer;
@@ -242,13 +255,23 @@
 
     .option label:hover {
       border-color: var(--primary);
+      background: #f8fbff;
     }
 
     .option input:checked + label {
       border-color: var(--primary);
       background: var(--primary);
-      color: white;
+      color: #ffffff;
     }
+
+    .option small {
+      font-weight: 500;
+      opacity: 0.8;
+    }
+
+    /* =====================================================
+       CUSTOM RANGE
+       ===================================================== */
 
     .custom-range {
       display: grid;
@@ -256,7 +279,8 @@
       gap: 14px;
       margin-top: 14px;
       padding: 16px;
-      background: var(--surface-2);
+      background: #f8fafc;
+      border: 1px solid var(--border);
       border-radius: 12px;
     }
 
@@ -272,7 +296,7 @@
       padding: 12px 14px;
       border: 1px solid var(--border);
       border-radius: 10px;
-      background: var(--surface);
+      background: #ffffff;
       color: var(--text);
       outline: none;
     }
@@ -281,7 +305,7 @@
     .theme-control select:focus,
     .answer-input:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
     .error {
@@ -289,6 +313,10 @@
       font-weight: 700;
       margin: 10px 0 0;
     }
+
+    /* =====================================================
+       BUTTONS
+       ===================================================== */
 
     .start-area {
       display: flex;
@@ -298,16 +326,18 @@
 
     .primary-btn,
     .secondary-btn {
-      border: 0;
+      display: inline-block;
       border-radius: 12px;
       padding: 13px 22px;
       font-weight: 800;
       transition: 0.15s ease;
+      text-decoration: none;
     }
 
     .primary-btn {
+      border: 0;
       background: var(--primary);
-      color: white;
+      color: #ffffff;
     }
 
     .primary-btn:hover {
@@ -315,14 +345,19 @@
     }
 
     .secondary-btn {
-      background: var(--surface-2);
-      color: var(--text);
       border: 1px solid var(--border);
+      background: #ffffff;
+      color: var(--text);
     }
 
     .secondary-btn:hover {
       border-color: var(--primary);
+      color: var(--primary);
     }
+
+    /* =====================================================
+       THEME
+       ===================================================== */
 
     .theme-control {
       max-width: 220px;
@@ -335,7 +370,9 @@
       margin-bottom: 6px;
     }
 
-    /* Play screen */
+    /* =====================================================
+       PLAY SCREEN
+       ===================================================== */
 
     .play-header {
       display: flex;
@@ -353,26 +390,21 @@
     }
 
     .hud-item {
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 10px 14px;
       font-weight: 800;
     }
 
-    #streak-display.is-milestone {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.12);
-    }
-
     .mode-badge {
       display: inline-block;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
       padding: 8px 12px;
       border-radius: 999px;
-      font-weight: 700;
+      background: #f8fafc;
+      border: 1px solid var(--border);
       color: var(--muted);
+      font-weight: 700;
     }
 
     .quiz-card {
@@ -380,6 +412,10 @@
       margin: 0 auto;
       text-align: center;
     }
+
+    /* =====================================================
+       TIMER
+       ===================================================== */
 
     .timer {
       margin: 18px 0;
@@ -394,17 +430,17 @@
     }
 
     .progress-bar {
-      height: 12px;
       width: 100%;
+      height: 12px;
       overflow: hidden;
       border-radius: 999px;
-      background: var(--surface-2);
+      background: #f1f5f9;
       border: 1px solid var(--border);
     }
 
     .progress-fill {
-      height: 100%;
       width: 100%;
+      height: 100%;
       transform-origin: left center;
       transform: scaleX(1);
       background: var(--primary);
@@ -415,12 +451,20 @@
       background: var(--danger);
     }
 
+    /* =====================================================
+       QUESTION
+       ===================================================== */
+
     .problem {
       margin: 45px 0 30px;
       font-size: clamp(2.5rem, 8vw, 5rem);
       font-weight: 900;
       letter-spacing: 1px;
     }
+
+    /* =====================================================
+       ANSWER
+       ===================================================== */
 
     .answer-form {
       display: flex;
@@ -438,17 +482,21 @@
       text-align: center;
       border: 1px solid var(--border);
       border-radius: 12px;
-      background: var(--surface);
+      background: #ffffff;
       color: var(--text);
       outline: none;
     }
+
+    /* =====================================================
+       FEEDBACK
+       ===================================================== */
 
     .feedback {
       min-height: 60px;
       margin-top: 22px;
       padding: 14px;
       border-radius: 12px;
-      background: var(--surface-2);
+      background: #f8fafc;
       border: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -460,44 +508,18 @@
     .feedback[data-state="correct"] {
       color: var(--success);
       border-color: var(--success);
+      background: #f0fdf4;
     }
 
     .feedback[data-state="incorrect"] {
       color: var(--danger);
       border-color: var(--danger);
+      background: #fef2f2;
     }
 
-    .visually-hidden {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .is-shake {
-      animation: shake 0.25s ease;
-    }
-
-    @keyframes shake {
-      0%, 100% {
-        transform: translateX(0);
-      }
-
-      25% {
-        transform: translateX(-5px);
-      }
-
-      75% {
-        transform: translateX(5px);
-      }
-    }
-
-    /* Result */
+    /* =====================================================
+       RESULT SCREEN
+       ===================================================== */
 
     .result-card {
       max-width: 760px;
@@ -533,12 +555,15 @@
     .result-actions {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 12px;
       flex-wrap: wrap;
       margin-top: 28px;
     }
 
-    /* Information sections */
+    /* =====================================================
+       FEATURES
+       ===================================================== */
 
     .info-grid {
       display: grid;
@@ -548,7 +573,7 @@
     }
 
     .info-card {
-      background: var(--surface);
+      background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 20px;
@@ -558,20 +583,72 @@
       margin-top: 0;
     }
 
+    .info-card p {
+      color: var(--muted);
+    }
+
+    /* =====================================================
+       ACCESSIBILITY
+       ===================================================== */
+
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .is-shake {
+      animation: shake 0.25s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-5px);
+      }
+
+      75% {
+        transform: translateX(5px);
+      }
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
     .footer {
       margin-top: 40px;
       padding: 30px 0;
       border-top: 1px solid var(--border);
       color: var(--muted);
       text-align: center;
-      background: var(--surface);
+      background: #ffffff;
     }
 
     .footer a {
       font-weight: 700;
+      text-decoration: none;
     }
 
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
     @media (max-width: 700px) {
+
       .header-inner {
         flex-direction: column;
         padding: 15px 0;
@@ -579,6 +656,7 @@
 
       .nav {
         justify-content: center;
+        gap: 12px;
       }
 
       main {
@@ -604,49 +682,97 @@
       .play-header {
         align-items: flex-start;
       }
+
+      .hud {
+        width: 100%;
+      }
+
+      .hud-item {
+        flex: 1;
+        text-align: center;
+      }
+
+      .problem {
+        margin-top: 35px;
+      }
     }
   </style>
 </head>
 
+
 <body>
 
-  <!-- =======================================================
+  <!-- =====================================================
        HEADER
-       ======================================================= -->
+       ===================================================== -->
 
   <header class="site-header">
+
     <div class="container header-inner">
 
-      <a class="logo" href="index.html">
-        🧮 MathQuizGame
+      <a
+        class="logo"
+        href="index.html"
+      >
+        MathQuizGame
       </a>
 
-      <nav class="nav" aria-label="Main navigation">
-        <a href="#game">Game</a>
-        <a href="#features">Features</a>
-        <a href="learn.html">Learn Math</a>
-        <a href="pdfs.html">Math Resources</a>
-        <a href="about.html">About</a>
-        <a href="privacy-policy.html">Privacy Policy</a>
+      <nav
+        class="nav"
+        aria-label="Main navigation"
+      >
+
+        <a href="#game">
+          Game
+        </a>
+
+        <a href="#features">
+          Features
+        </a>
+
+        <a href="how-to-play.html">
+          How to Play
+        </a>
+
+        <a href="learn.html">
+          Learn Math
+        </a>
+
+        <a href="about.html">
+          About
+        </a>
+
+        <a href="privacy-policy.html">
+          Privacy Policy
+        </a>
+
       </nav>
 
     </div>
+
   </header>
 
 
-  <!-- =======================================================
+  <!-- =====================================================
        MAIN
-       ======================================================= -->
+       ===================================================== -->
 
   <main id="game">
 
     <div class="container">
 
-      <!-- ===================================================
-           SETUP SCREEN
-           =================================================== -->
 
-      <section id="setup-screen" class="screen" aria-labelledby="game-title">
+      <!-- =================================================
+           SETUP SCREEN
+           ================================================= -->
+
+      <section
+        id="setup-screen"
+        class="screen"
+        aria-labelledby="game-title"
+      >
+
+        <!-- HERO -->
 
         <div class="hero">
 
@@ -655,8 +781,8 @@
           </h1>
 
           <p>
-            Practice arithmetic, build streaks, improve your speed,
-            and track your performance with MathQuizGame.
+            Solve math problems, build your daily streak,
+            improve your speed, and track your performance.
           </p>
 
         </div>
@@ -677,11 +803,13 @@
 
         <div class="panel">
 
-          <h2>Game Setup</h2>
+          <h2>
+            Game Setup
+          </h2>
 
           <p class="section-description">
-            Choose your difficulty, operations, and game mode.
-            Your settings are saved automatically.
+            Choose your difficulty, operations, game mode,
+            and timer settings.
           </p>
 
 
@@ -689,11 +817,15 @@
 
           <fieldset class="option-group">
 
-            <legend>Difficulty</legend>
+            <legend>
+              Difficulty
+            </legend>
 
             <div class="option-grid">
 
+
               <div class="option">
+
                 <input
                   type="radio"
                   id="difficulty-easy"
@@ -707,10 +839,12 @@
                   <br>
                   <small>1–10</small>
                 </label>
+
               </div>
 
 
               <div class="option">
+
                 <input
                   type="radio"
                   id="difficulty-medium"
@@ -723,10 +857,12 @@
                   <br>
                   <small>1–100</small>
                 </label>
+
               </div>
 
 
               <div class="option">
+
                 <input
                   type="radio"
                   id="difficulty-hard"
@@ -739,10 +875,12 @@
                   <br>
                   <small>1–1000</small>
                 </label>
+
               </div>
 
 
               <div class="option">
+
                 <input
                   type="radio"
                   id="difficulty-custom"
@@ -755,6 +893,7 @@
                   <br>
                   <small>Your range</small>
                 </label>
+
               </div>
 
             </div>
@@ -771,7 +910,7 @@
               <div class="field">
 
                 <label for="min-number">
-                  Minimum number
+                  Minimum Number
                 </label>
 
                 <input
@@ -788,7 +927,7 @@
               <div class="field">
 
                 <label for="max-number">
-                  Maximum number
+                  Maximum Number
                 </label>
 
                 <input
@@ -800,6 +939,7 @@
                 >
 
               </div>
+
 
               <p
                 id="range-error"
@@ -817,9 +957,12 @@
 
           <fieldset class="option-group">
 
-            <legend>Operations</legend>
+            <legend>
+              Operations
+            </legend>
 
             <div class="option-grid">
+
 
               <div class="option">
 
@@ -910,9 +1053,12 @@
 
           <fieldset class="option-group">
 
-            <legend>Game Mode</legend>
+            <legend>
+              Game Mode
+            </legend>
 
             <div class="option-grid">
+
 
               <div class="option">
 
@@ -962,9 +1108,12 @@
             class="option-group"
           >
 
-            <legend>Timer Duration</legend>
+            <legend>
+              Timer Duration
+            </legend>
 
             <div class="option-grid">
+
 
               <div class="option">
 
@@ -976,7 +1125,7 @@
                 >
 
                 <label for="duration-30">
-                  30 seconds
+                  30 Seconds
                 </label>
 
               </div>
@@ -993,7 +1142,7 @@
                 >
 
                 <label for="duration-60">
-                  60 seconds
+                  60 Seconds
                 </label>
 
               </div>
@@ -1009,7 +1158,7 @@
                 >
 
                 <label for="duration-120">
-                  120 seconds
+                  120 Seconds
                 </label>
 
               </div>
@@ -1037,16 +1186,12 @@
                 Light
               </option>
 
-              <option value="dark">
-                Dark
-              </option>
-
             </select>
 
           </div>
 
 
-          <!-- START -->
+          <!-- START BUTTON -->
 
           <div class="start-area">
 
@@ -1063,20 +1208,32 @@
         </div>
 
 
-        <!-- FEATURES -->
+        <!-- =================================================
+             FEATURES
+             ================================================= -->
 
-        <section id="features" class="panel">
+        <section
+          id="features"
+          class="panel"
+        >
 
-          <h2>MathQuizGame Features</h2>
+          <h2>
+            MathQuizGame Features
+          </h2>
+
 
           <div class="info-grid">
 
+
             <article class="info-card">
 
-              <h3>🔥 Daily Streak</h3>
+              <h3>
+                Daily Streak
+              </h3>
 
               <p>
-                Return every day and build your practice streak.
+                Come back every day and build your math
+                practice streak.
               </p>
 
             </article>
@@ -1084,10 +1241,13 @@
 
             <article class="info-card">
 
-              <h3>⚡ Score Multipliers</h3>
+              <h3>
+                Score Multipliers
+              </h3>
 
               <p>
-                Consecutive correct answers increase your score multiplier.
+                Keep answering correctly to increase your
+                score multiplier.
               </p>
 
             </article>
@@ -1095,11 +1255,13 @@
 
             <article class="info-card">
 
-              <h3>🎯 Multiple Difficulties</h3>
+              <h3>
+                Multiple Difficulties
+              </h3>
 
               <p>
-                Practice from beginner numbers to challenging
-                calculations up to 1000.
+                Choose Easy, Medium, Hard, or create your
+                own number range.
               </p>
 
             </article>
@@ -1107,11 +1269,13 @@
 
             <article class="info-card">
 
-              <h3>📊 Statistics</h3>
+              <h3>
+                Statistics
+              </h3>
 
               <p>
-                Track your accuracy for addition, subtraction,
-                multiplication, and division.
+                Track your performance across different
+                mathematical operations.
               </p>
 
             </article>
@@ -1119,10 +1283,13 @@
 
             <article class="info-card">
 
-              <h3>⏱️ Timed Mode</h3>
+              <h3>
+                Timed Mode
+              </h3>
 
               <p>
-                Challenge yourself against a countdown timer.
+                Race against the clock and try to achieve
+                your highest score.
               </p>
 
             </article>
@@ -1130,10 +1297,13 @@
 
             <article class="info-card">
 
-              <h3>♾️ Endless Mode</h3>
+              <h3>
+                Endless Mode
+              </h3>
 
               <p>
-                Keep answering questions until you make three mistakes.
+                Keep solving problems until you reach
+                three misses.
               </p>
 
             </article>
@@ -1145,9 +1315,9 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            PLAY SCREEN
-           =================================================== -->
+           ================================================= -->
 
       <section
         id="play-screen"
@@ -1155,6 +1325,9 @@
         hidden
         aria-labelledby="problem"
       >
+
+
+        <!-- PLAY HEADER -->
 
         <div class="play-header">
 
@@ -1172,19 +1345,22 @@
 
           <div class="hud">
 
+
             <div
               id="score"
               class="hud-item"
             >
-              0
+              Score: 0
             </div>
+
 
             <div
               id="streak-display"
               class="hud-item"
             >
-              🔥 Streak: 0
+              Streak: 0
             </div>
+
 
             <div
               id="multiplier"
@@ -1192,6 +1368,7 @@
             >
               1×
             </div>
+
 
             <div
               id="misses-label"
@@ -1206,7 +1383,10 @@
         </div>
 
 
+        <!-- QUIZ CARD -->
+
         <div class="panel quiz-card">
+
 
           <!-- TIMER -->
 
@@ -1218,7 +1398,7 @@
             <div class="timer-top">
 
               <span>
-                Time remaining
+                Time Remaining
               </span>
 
               <span id="time-label">
@@ -1248,7 +1428,7 @@
           </div>
 
 
-          <!-- QUESTION -->
+          <!-- MATH PROBLEM -->
 
           <div
             id="problem"
@@ -1259,7 +1439,7 @@
           </div>
 
 
-          <!-- ANSWER -->
+          <!-- ANSWER FORM -->
 
           <form
             id="answer-form"
@@ -1273,6 +1453,7 @@
               Your answer
             </label>
 
+
             <input
               id="answer-input"
               class="answer-input"
@@ -1282,6 +1463,7 @@
               placeholder="Enter your answer"
               aria-describedby="feedback"
             >
+
 
             <button
               class="primary-btn"
@@ -1319,6 +1501,8 @@
           ></div>
 
 
+          <!-- PLAY CONTROLS -->
+
           <div class="result-actions">
 
             <button
@@ -1328,6 +1512,7 @@
             >
               Restart
             </button>
+
 
             <button
               id="setup-btn"
@@ -1344,9 +1529,9 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            RESULT SCREEN
-           =================================================== -->
+           ================================================= -->
 
       <section
         id="result-screen"
@@ -1356,6 +1541,7 @@
       >
 
         <div class="panel result-card">
+
 
           <h1 id="result-title">
             Quiz Complete
@@ -1370,13 +1556,14 @@
           </p>
 
 
-          <!-- STATS -->
+          <!-- STATISTICS -->
 
           <div class="stats">
 
             <h2>
-              Lifetime Accuracy
+              Lifetime Statistics
             </h2>
+
 
             <ul
               id="stats-list"
@@ -1384,7 +1571,9 @@
             >
 
               <li>
-                <span>Play a few questions to see accuracy by operation.</span>
+                <span>
+                  Complete a quiz to see your statistics.
+                </span>
               </li>
 
             </ul>
@@ -1392,7 +1581,7 @@
           </div>
 
 
-          <!-- ACTIONS -->
+          <!-- RESULT BUTTONS -->
 
           <div class="result-actions">
 
@@ -1403,6 +1592,7 @@
             >
               Play Again
             </button>
+
 
             <button
               id="result-setup-btn"
@@ -1419,9 +1609,9 @@
       </section>
 
 
-      <!-- ===================================================
+      <!-- =================================================
            LEARN SECTION
-           =================================================== -->
+           ================================================= -->
 
       <section class="panel">
 
@@ -1431,21 +1621,23 @@
 
         <p>
           Improve your calculation skills with mental-math
-          strategies and practice resources.
+          strategies and additional practice resources.
         </p>
+
 
         <div class="result-actions">
 
           <a
-            class="secondary-btn"
             href="learn.html"
+            class="secondary-btn"
           >
             Learn Math
           </a>
 
+
           <a
-            class="secondary-btn"
             href="pdfs.html"
+            class="secondary-btn"
           >
             Math Resources
           </a>
@@ -1455,9 +1647,9 @@
       </section>
 
 
-      <!-- ===================================================
-           ABOUT
-           =================================================== -->
+      <!-- =================================================
+           ABOUT SECTION
+           ================================================= -->
 
       <section class="panel">
 
@@ -1466,15 +1658,14 @@
         </h2>
 
         <p>
-          MathQuizGame is a free educational tool designed to
-          help students practice arithmetic and improve their
-          calculation speed.
+          MathQuizGame is a free educational tool designed
+          to help students practice arithmetic and improve
+          their calculation skills.
         </p>
 
         <p>
-          You can choose different difficulty levels, individual
-          operations, timed practice, or endless practice.
-          Your game statistics are stored locally in your browser.
+          Game settings, daily streak information, and
+          statistics are stored locally in your browser.
         </p>
 
       </section>
@@ -1484,9 +1675,9 @@
   </main>
 
 
-  <!-- =======================================================
+  <!-- =====================================================
        FOOTER
-       ======================================================= -->
+       ===================================================== -->
 
   <footer class="footer">
 
@@ -1494,27 +1685,43 @@
 
       <p>
         © 2026 MathQuizGame · Free educational tool ·
+
         <a href="#game">
           Back to top
         </a>
+
         ·
+
         <a href="privacy-policy.html">
           Privacy Policy
         </a>
       </p>
 
+
       <p>
+
         <a href="about.html">
           About
         </a>
+
         ·
+
         <a href="how-to-play.html">
           How to Play
         </a>
+
         ·
+
         <a href="learn.html">
           Learn Math
         </a>
+
+        ·
+
+        <a href="privacy-policy.html">
+          Privacy Policy
+        </a>
+
       </p>
 
     </div>
@@ -1522,17 +1729,11 @@
   </footer>
 
 
-  <!-- =======================================================
-       LEARN STORE
-       ======================================================= -->
+  <!-- =====================================================
+       EXISTING FILES
+       ===================================================== -->
 
   <script src="learn-store.js"></script>
-
-
-  <!-- =======================================================
-       YOUR EXISTING ADVANCED GAME LOGIC
-       DO NOT PUT THE OLD INLINE GAME JS HERE.
-       ======================================================= -->
 
   <script src="app.js"></script>
 
