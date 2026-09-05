@@ -1,457 +1,1022 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7XDB1KWQRB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-  <title>Math Quiz — Practice Math Fast</title>
+    gtag('config', 'G-7XDB1KWQRB');
+  </script>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Math Quiz – Free Online Math Quiz Game</title>
 
   <meta
     name="description"
-    content="Practice addition, subtraction, multiplication, and division with Math Quiz."
-  />
+    content="Play a free online math quiz with addition, subtraction, multiplication, and division questions. Test your math skills with a 10-second timer."
+  >
 
-  <link rel="stylesheet" href="style.css" />
+  <meta
+    name="keywords"
+    content="math quiz, online math quiz, free math game, arithmetic practice, addition subtraction multiplication division"
+  >
 
-  <script>
-    document.documentElement.setAttribute("data-theme", "light");
-  </script>
+  <link
+    rel="canonical"
+    href="https://mathquizgame-umber.vercel.app/"
+  >
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Math Quiz – Free Online Math Quiz Game">
+  <meta
+    property="og:description"
+    content="Play a free online math quiz with addition, subtraction, multiplication, and division questions. Test your math skills with a 10-second timer."
+  >
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mathquizgame-umber.vercel.app/">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Math Quiz – Free Online Math Quiz Game">
+  <meta
+    name="twitter:description"
+    content="Play a free online math quiz with addition, subtraction, multiplication, and division questions."
+  >
+
+  <!-- Favicon -->
+  <link
+    rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>∑</text></svg>"
+  >
+
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #3b82f6;
+      --success: #16a34a;
+      --success-bg: #dcfce7;
+      --error: #dc2626;
+      --error-bg: #fee2e2;
+      --warning: #d97706;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.07),
+                 0 2px 4px -2px rgb(0 0 0 / 0.05);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08),
+                   0 4px 6px -4px rgb(0 0 0 / 0.05);
+      --radius: 16px;
+      --radius-sm: 10px;
+      --transition: 0.2s ease;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ========== HEADER ========== */
+
+    .header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: var(--shadow);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.85rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span {
+      color: var(--text);
+    }
+
+    .nav {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 8px;
+      transition: color var(--transition),
+        background var(--transition);
+    }
+
+    .nav a:hover,
+    .nav a:focus-visible {
+      color: var(--primary);
+      background: #eff6ff;
+      outline: none;
+    }
+
+    .nav a:focus-visible {
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+    }
+
+    /* ========== MAIN ========== */
+
+    main {
+      flex: 1;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 1.25rem;
+    }
+
+    /* ========== HERO ========== */
+
+    .hero {
+      padding: 3.5rem 0 2.5rem;
+      text-align: center;
+    }
+
+    .hero-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      padding: 3rem 2rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .math-symbols {
+      font-size: 1.75rem;
+      letter-spacing: 0.6rem;
+      color: var(--primary);
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.85rem, 5vw, 2.6rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 0.85rem;
+      color: var(--text);
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 2rem;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.85rem 1.6rem;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: background var(--transition),
+        transform var(--transition),
+        box-shadow var(--transition);
+      text-decoration: none;
+      line-height: 1.2;
+    }
+
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.45);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: var(--text);
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    /* ========== FEATURES ========== */
+
+    .features {
+      padding: 1rem 0 3.5rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(240px, 1fr)
+      );
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 1.75rem 1.5rem;
+      box-shadow: var(--shadow);
+      text-align: center;
+      transition: transform var(--transition),
+        box-shadow var(--transition);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      background: #eff6ff;
+      color: var(--primary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 0 auto 1rem;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ========== QUIZ SCREEN ========== */
+
+    .quiz-screen,
+    .results-screen {
+      display: none;
+      padding: 2rem 0 3rem;
+    }
+
+    .quiz-screen.active,
+    .results-screen.active {
+      display: block;
+    }
+
+    .quiz-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 1.75rem 1.5rem 2rem;
+    }
+
+    .quiz-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .quiz-header .score {
+      color: var(--primary);
+    }
+
+    .progress-bar {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-bottom: 1.75rem;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 99px;
+      width: 0%;
+      transition: width 0.35s ease;
+    }
+
+    .timer-wrap {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .timer {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: #eff6ff;
+      color: var(--primary);
+      font-size: 1.85rem;
+      font-weight: 700;
+      transition: background 0.3s,
+        color 0.3s,
+        transform 0.2s;
+    }
+
+    .timer.urgent {
+      background: #fef2f2;
+      color: var(--error);
+      transform: scale(1.08);
+    }
+
+    .question {
+      text-align: center;
+      font-size: clamp(1.75rem, 6vw, 2.35rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.75rem;
+      min-height: 2.8rem;
+    }
+
+    .answer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .answer-input {
+      width: 100%;
+      font-family: inherit;
+      font-size: 1.25rem;
+      padding: 0.95rem 1.1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      transition: border-color var(--transition),
+        box-shadow var(--transition);
+      background: #fff;
+      color: var(--text);
+    }
+
+    .answer-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    }
+
+    .answer-input::placeholder {
+      color: #94a3b8;
+    }
+
+    .feedback {
+      text-align: center;
+      min-height: 2.2rem;
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-top: 1rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.25s ease,
+        transform 0.25s ease;
+    }
+
+    .feedback.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .feedback.correct {
+      color: var(--success);
+    }
+
+    .feedback.incorrect {
+      color: var(--error);
+    }
+
+    .feedback.timeout {
+      color: var(--warning);
+    }
+
+    /* ========== RESULTS ========== */
+
+    .results-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 2.5rem 1.75rem;
+      text-align: center;
+    }
+
+    .results-card h2 {
+      font-size: 1.65rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .final-score {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.1;
+      margin-bottom: 0.25rem;
+    }
+
+    .final-percent {
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
+    }
+
+    .performance-msg {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      color: var(--text);
+    }
+
+    .results-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    /* ========== HOW TO PLAY ========== */
+
+    .howto {
+      padding: 3rem 0;
+      background: #fff;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 1.65rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(220px, 1fr)
+      );
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .step {
+      text-align: center;
+      padding: 1.25rem;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin: 0 auto 0.85rem;
+    }
+
+    .step h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .step p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    /* ========== ABOUT / SEO CONTENT ========== */
+
+    .about-content {
+      padding: 3rem 0 3.5rem;
+      background: var(--bg);
+    }
+
+    .about-content h2 {
+      font-size: 1.4rem;
+      margin: 1.75rem 0 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .about-content h2:first-child {
+      margin-top: 0;
+    }
+
+    .about-content p {
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      max-width: 720px;
+    }
+
+    /* ========== FOOTER ========== */
+
+    .footer {
+      background: #0f172a;
+      color: #94a3b8;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .footer a {
+      color: #cbd5e1;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #fff;
+    }
+
+    /* ========== UTILITIES ========== */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ========== RESPONSIVE ========== */
+
+    @media (max-width: 600px) {
+      .header-inner {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .nav {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .hero {
+        padding: 2rem 0 1.5rem;
+      }
+
+      .hero-card {
+        padding: 2rem 1.25rem;
+      }
+
+      .quiz-card {
+        padding: 1.35rem 1.1rem 1.75rem;
+      }
+
+      .btn {
+        padding: 0.9rem 1.25rem;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn-group .btn {
+        width: 100%;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <!-- =====================================================
-       HEADER
-       ===================================================== -->
+  <!-- ========== HEADER ========== -->
 
-  <header class="site-header">
-    <div class="site-header-inner">
+  <header class="header">
+    <div class="header-inner">
 
-      <a class="wordmark" href="index.html">
+      <a
+        href="#"
+        class="logo"
+        id="logo-home"
+        aria-label="Math Quiz Home"
+      >
         Math <span>Quiz</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="learn.html">Learn Math</a>
-        <a href="how-to-play.html">How to Play</a>
-        <a href="about.html">About</a>
-      </nav>
+      <nav class="nav" aria-label="Main navigation">
 
+        <a href="#home" data-nav="home">
+          Home
+        </a>
+
+        <a href="#howto" data-nav="howto">
+          How to Play
+        </a>
+
+        <a href="#about" data-nav="about">
+          About
+        </a>
+
+        <a
+          href="learn-secrets-of-mental-math.pdf"
+          target="_blank"
+        >
+          Learn Mental Math
+        </a>
+
+      </nav>
     </div>
   </header>
 
 
-  <!-- =====================================================
-       SETUP SCREEN
-       ===================================================== -->
-
   <main>
 
-    <section id="setup-screen">
+    <!-- ========== HOME / HERO ========== -->
+
+    <section
+      id="home"
+      class="hero"
+      aria-labelledby="hero-heading"
+    >
 
       <div class="container">
 
-        <div class="setup-header">
+        <div class="hero-card">
 
-          <p id="daily-indicator" class="daily-indicator">
-            Daily streak: 0
+          <div
+            class="math-symbols"
+            aria-hidden="true"
+          >
+            + − × ÷
+          </div>
+
+          <h1 id="hero-heading">
+            Test Your Math Skills
+          </h1>
+
+          <p class="hero-sub">
+            Solve quick math problems, beat the clock,
+            and improve your arithmetic skills.
           </p>
 
-          <h1>Math Quiz</h1>
+          <div class="btn-group">
 
-          <p>
-            Practice math, build your streak, and improve your speed.
-          </p>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="start-quiz-btn"
+            >
+              Start Quiz
+            </button>
 
-        </div>
+            <a
+              href="#howto"
+              class="btn btn-secondary"
+            >
+              How It Works
+            </a>
 
-
-        <!-- Difficulty -->
-
-        <div class="setup-group">
-
-          <h2>Difficulty</h2>
-
-          <label>
-            <input
-              type="radio"
-              name="difficulty"
-              value="easy"
-              checked
-            />
-            Easy
-            <span>1–10</span>
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="difficulty"
-              value="medium"
-            />
-            Medium
-            <span>1–100</span>
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="difficulty"
-              value="hard"
-            />
-            Hard
-            <span>1–1000</span>
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="difficulty"
-              value="custom"
-            />
-            Custom
-          </label>
+          </div>
 
         </div>
-
-
-        <!-- Custom Range -->
-
-        <div id="custom-range" hidden>
-
-          <label for="min-number">
-            Minimum number
-          </label>
-
-          <input
-            type="number"
-            id="min-number"
-            value="1"
-            min="0"
-            max="10000"
-          />
-
-          <label for="max-number">
-            Maximum number
-          </label>
-
-          <input
-            type="number"
-            id="max-number"
-            value="100"
-            min="1"
-            max="10000"
-          />
-
-          <p
-            id="range-error"
-            role="alert"
-            aria-live="polite"
-          ></p>
-
-        </div>
-
-
-        <!-- Operation -->
-
-        <div class="setup-group">
-
-          <h2>Operation</h2>
-
-          <label>
-            <input
-              type="radio"
-              name="operation"
-              value="mixed"
-              checked
-            />
-            Mixed
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="operation"
-              value="+"
-            />
-            Addition
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="operation"
-              value="-"
-            />
-            Subtraction
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="operation"
-              value="*"
-            />
-            Multiplication
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="operation"
-              value="/"
-            />
-            Division
-          </label>
-
-        </div>
-
-
-        <!-- Mode -->
-
-        <div class="setup-group">
-
-          <h2>Game Mode</h2>
-
-          <label>
-            <input
-              type="radio"
-              name="mode"
-              value="timed"
-              checked
-            />
-            Timed
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="mode"
-              value="endless"
-            />
-            Endless
-          </label>
-
-        </div>
-
-
-        <!-- Duration -->
-
-        <div id="duration-row">
-
-          <h2>Time Limit</h2>
-
-          <label>
-            <input
-              type="radio"
-              name="duration"
-              value="30"
-            />
-            30 seconds
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="duration"
-              value="60"
-              checked
-            />
-            60 seconds
-          </label>
-
-          <label>
-            <input
-              type="radio"
-              name="duration"
-              value="120"
-            />
-            120 seconds
-          </label>
-
-        </div>
-
-
-        <!-- Theme -->
-
-        <div class="setup-group">
-
-          <label for="theme-select">
-            Theme
-          </label>
-
-          <select id="theme-select">
-            <option value="system">System</option>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-
-        </div>
-
-
-        <button
-          id="start-btn"
-          type="button"
-        >
-          Start Quiz
-        </button>
 
       </div>
 
     </section>
 
 
-    <!-- =====================================================
-         PLAY SCREEN
-         ===================================================== -->
+    <!-- ========== FEATURES ========== -->
 
     <section
-      id="play-screen"
-      hidden
+      class="features"
+      aria-label="Quiz features"
     >
 
       <div class="container">
 
+        <div class="features-grid">
 
-        <!-- Game HUD -->
+          <article class="feature-card">
 
-        <div class="quiz-hud">
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              10
+            </div>
 
-          <div>
-            <span>Score</span>
-            <strong id="score">0</strong>
-          </div>
+            <h3>10 Questions</h3>
 
-          <div>
-            <span id="streak-display">
-              🔥 Streak: 0
-            </span>
+            <p>
+              Complete a quick 10-question challenge.
+            </p>
 
-            <strong id="multiplier">
-              1×
-            </strong>
-          </div>
+          </article>
 
-          <div>
-            <span id="mode-badge">
-              Timed · 60s
-            </span>
-          </div>
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              ⏱
+            </div>
+
+            <h3>10 Seconds</h3>
+
+            <p>
+              Solve every problem before the timer runs out.
+            </p>
+
+          </article>
+
+
+          <article class="feature-card">
+
+            <div
+              class="feature-icon"
+              aria-hidden="true"
+            >
+              ÷
+            </div>
+
+            <h3>4 Operations</h3>
+
+            <p>
+              Practice addition, subtraction,
+              multiplication, and division.
+            </p>
+
+          </article>
 
         </div>
 
+      </div>
 
-        <!-- Timer -->
+    </section>
 
-        <div id="timer-wrap">
 
-          <div class="timer-info">
+    <!-- ========== QUIZ SCREEN ========== -->
 
-            <span>
-              Time
+    <section
+      class="quiz-screen"
+      id="quiz-screen"
+      aria-label="Math quiz"
+      aria-live="polite"
+    >
+
+      <div class="container">
+
+        <div class="quiz-card">
+
+          <div class="quiz-header">
+
+            <span id="question-counter">
+              Question 1 / 10
             </span>
 
-            <strong id="time-label">
-              60s
-            </strong>
+            <span
+              class="score"
+              id="score-display"
+            >
+              Score: 0
+            </span>
 
+          </div>
+
+
+          <div
+            class="progress-bar"
+            role="progressbar"
+            aria-valuemin="0"
+            aria-valuemax="10"
+            aria-valuenow="0"
+            aria-label="Quiz progress"
+          >
+
+            <div
+              class="progress-fill"
+              id="progress-fill"
+            ></div>
+
+          </div>
+
+
+          <div class="timer-wrap">
+
+            <div
+              class="timer"
+              id="timer"
+              aria-label="Time remaining"
+            >
+              10
+            </div>
+
+          </div>
+
+
+          <div
+            class="question"
+            id="question-text"
+            aria-live="polite"
+          >
+            24 × 7 = ?
+          </div>
+
+
+          <form
+            class="answer-form"
+            id="answer-form"
+            autocomplete="off"
+          >
+
+            <label
+              for="answer-input"
+              class="sr-only"
+            >
+              Your answer
+            </label>
+
+            <input
+              type="text"
+              id="answer-input"
+              class="answer-input"
+              placeholder="Enter your answer"
+              inputmode="decimal"
+              aria-describedby="feedback"
+              required
+            >
+
+            <button
+              type="submit"
+              class="btn btn-primary btn-full"
+              id="submit-btn"
+            >
+              Submit Answer
+            </button>
+
+          </form>
+
+
+          <div
+            class="feedback"
+            id="feedback"
+            role="status"
+            aria-live="assertive"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========== RESULTS SCREEN ========== -->
+
+    <section
+      class="results-screen"
+      id="results-screen"
+      aria-label="Quiz results"
+    >
+
+      <div class="container">
+
+        <div class="results-card">
+
+          <h2>
+            Quiz Complete!
+          </h2>
+
+          <div
+            class="final-score"
+            id="final-score"
+          >
+            0 / 10
           </div>
 
           <div
-            id="progress-bar"
-            role="progressbar"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow="100"
+            class="final-percent"
+            id="final-percent"
           >
-            <div id="progress-fill"></div>
+            0%
           </div>
 
-        </div>
-
-
-        <!-- Endless Misses -->
-
-        <div
-          id="misses-label"
-          hidden
-        >
-          Misses: 0 / 3
-        </div>
-
-
-        <!-- Problem -->
-
-        <div id="problem">
-          1 + 1 =
-        </div>
-
-
-        <!-- Answer -->
-
-        <form id="answer-form">
-
-          <label
-            for="answer-input"
-            class="sr-only"
+          <p
+            class="performance-msg"
+            id="performance-msg"
           >
-            Your answer
-          </label>
+            Keep practicing and try again!
+          </p>
 
-          <input
-            type="text"
-            id="answer-input"
-            inputmode="decimal"
-            autocomplete="off"
-            placeholder="Enter your answer"
-            aria-describedby="feedback"
-          />
+          <div class="results-actions">
 
-          <button type="submit">
-            Submit Answer
-          </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-full"
+              id="play-again-btn"
+            >
+              Play Again
+            </button>
 
-        </form>
+            <button
+              type="button"
+              class="btn btn-secondary btn-full"
+              id="back-home-btn"
+            >
+              Back to Home
+            </button>
 
-
-        <!-- Feedback -->
-
-        <div
-          id="feedback"
-          aria-hidden="true"
-        >
-
-          <span id="feedback-mark"></span>
-
-          <span id="feedback-text"></span>
-
-        </div>
-
-        <div
-          id="feedback-live"
-          aria-live="polite"
-          class="sr-only"
-        ></div>
-
-
-        <!-- Game Controls -->
-
-        <div class="game-controls">
-
-          <button
-            id="restart-btn"
-            type="button"
-          >
-            Restart
-          </button>
-
-          <button
-            id="setup-btn"
-            type="button"
-          >
-            Back to Setup
-          </button>
+          </div>
 
         </div>
 
@@ -460,56 +1025,141 @@
     </section>
 
 
-    <!-- =====================================================
-         RESULT SCREEN
-         ===================================================== -->
+    <!-- ========== HOW TO PLAY ========== -->
 
     <section
-      id="result-screen"
-      hidden
+      class="howto"
+      id="howto"
+      aria-labelledby="howto-title"
     >
 
       <div class="container">
 
-        <h1>Quiz Complete!</h1>
+        <h2
+          class="section-title"
+          id="howto-title"
+        >
+          How to Play
+        </h2>
 
-        <p id="result-summary"></p>
+        <div class="steps">
+
+          <div class="step">
+
+            <div class="step-num">
+              1
+            </div>
+
+            <h3>
+              Start the Quiz
+            </h3>
+
+            <p>
+              Press Start Quiz to begin.
+            </p>
+
+          </div>
 
 
-        <!-- Statistics -->
+          <div class="step">
 
-        <div class="results-stats">
+            <div class="step-num">
+              2
+            </div>
 
-          <h2>Your Statistics</h2>
+            <h3>
+              Solve the Problem
+            </h3>
 
-          <ul id="stats-list">
-            <li>
-              Play a few questions to see accuracy by operation.
-            </li>
-          </ul>
+            <p>
+              Enter your answer before the
+              10-second timer ends.
+            </p>
+
+          </div>
+
+
+          <div class="step">
+
+            <div class="step-num">
+              3
+            </div>
+
+            <h3>
+              See Your Score
+            </h3>
+
+            <p>
+              Complete all 10 questions and
+              see your final result.
+            </p>
+
+          </div>
 
         </div>
 
+      </div>
 
-        <!-- Result Controls -->
+    </section>
 
-        <div class="result-controls">
 
-          <button
-            id="play-again-btn"
-            type="button"
-          >
-            Play Again
-          </button>
+    <!-- ========== ABOUT / SEO CONTENT ========== -->
 
-          <button
-            id="result-setup-btn"
-            type="button"
-          >
-            Back to Setup
-          </button>
+    <section
+      class="about-content"
+      id="about"
+      aria-labelledby="about-heading"
+    >
 
-        </div>
+      <div class="container">
+
+        <h2 id="about-heading">
+          Free Online Math Quiz
+        </h2>
+
+        <p>
+          This free online math quiz helps students and learners
+          practice arithmetic skills through quick, timed challenges.
+          Each round consists of 10 randomly generated questions
+          covering the four basic operations.
+        </p>
+
+
+        <h2>
+          How to Practice Math With This Quiz
+        </h2>
+
+        <p>
+          Start a quiz, read the equation carefully, and type your
+          answer before the 10-second timer expires. You receive
+          immediate feedback after every question. At the end you
+          see your total score and percentage so you can track
+          improvement over time. The quiz continues through all
+          10 questions even if you answer incorrectly, giving you
+          a complete practice session every time.
+        </p>
+
+
+        <h2>
+          Addition, Subtraction, Multiplication and Division
+        </h2>
+
+        <p>
+          Questions use numbers from 1 to 40. Addition, subtraction,
+          and multiplication expect whole-number answers. Division
+          answers are calculated to two decimal places. The game
+          never divides by zero. Regular practice with mixed
+          operations builds speed, accuracy, and confidence in
+          mental math.
+        </p>
+
+        <p>
+          Whether you are a student preparing for school, a parent
+          looking for a simple practice tool, or anyone wanting a
+          quick brain workout, this math quiz offers a clean,
+          focused experience with no distractions and no sign-up
+          required.
+        </p>
 
       </div>
 
@@ -518,45 +1168,668 @@
   </main>
 
 
-  <!-- =====================================================
-       FOOTER
-       ===================================================== -->
+  <!-- ========== FOOTER ========== -->
 
-  <footer class="site-footer">
+  <footer class="footer">
 
-    <div class="site-footer-inner">
+    <div class="container">
 
       <p>
-        © 2026 Math Quiz. All rights reserved.
-      </p>
-
-      <nav aria-label="Footer navigation">
-
-        <a href="about.html">
-          About
-        </a>
-
-        <a href="how-to-play.html">
-          How to Play
-        </a>
-
+        © 2026 Math Quiz · Free educational tool ·
+        <a href="#home">Back to top</a> ·
         <a href="privacy-policy.html">
           Privacy Policy
         </a>
-
-      </nav>
+      </p>
 
     </div>
 
   </footer>
 
 
-  <!-- =====================================================
-       SCRIPTS
-       ===================================================== -->
+  <!-- ========== ORIGINAL GAME JAVASCRIPT ========== -->
 
-  <script src="learn-store.js"></script>
-  <script src="app.js"></script>
+  <script>
+
+    // ========== CONSTANTS ==========
+
+    const TOTAL_QUESTIONS = 10;
+    const TIME_LIMIT = 10;
+    const MIN_NUMBER = 1;
+    const MAX_NUMBER = 40;
+
+
+    // ========== STATE ==========
+
+    let score = 0;
+    let currentQuestion = 0;
+    let correctAnswer = null;
+    let currentOperation = null;
+    let timerInterval = null;
+    let timeLeft = TIME_LIMIT;
+    let isWaiting = false;
+
+
+    // ========== DOM REFERENCES ==========
+
+    const homeSection =
+      document.getElementById('home');
+
+    const featuresSection =
+      document.querySelector('.features');
+
+    const quizScreen =
+      document.getElementById('quiz-screen');
+
+    const resultsScreen =
+      document.getElementById('results-screen');
+
+    const startQuizBtn =
+      document.getElementById('start-quiz-btn');
+
+    const questionCounter =
+      document.getElementById('question-counter');
+
+    const scoreDisplay =
+      document.getElementById('score-display');
+
+    const progressFill =
+      document.getElementById('progress-fill');
+
+    const timerEl =
+      document.getElementById('timer');
+
+    const questionText =
+      document.getElementById('question-text');
+
+    const answerForm =
+      document.getElementById('answer-form');
+
+    const answerInput =
+      document.getElementById('answer-input');
+
+    const submitBtn =
+      document.getElementById('submit-btn');
+
+    const feedbackEl =
+      document.getElementById('feedback');
+
+    const finalScoreEl =
+      document.getElementById('final-score');
+
+    const finalPercentEl =
+      document.getElementById('final-percent');
+
+    const performanceMsg =
+      document.getElementById('performance-msg');
+
+    const playAgainBtn =
+      document.getElementById('play-again-btn');
+
+    const backHomeBtn =
+      document.getElementById('back-home-btn');
+
+    const logoHome =
+      document.getElementById('logo-home');
+
+
+    // ========== GAME LOGIC ==========
+
+    function generateQuestion() {
+
+      let a =
+        Math.floor(
+          Math.random() *
+          (MAX_NUMBER - MIN_NUMBER + 1)
+        ) + MIN_NUMBER;
+
+      let b =
+        Math.floor(
+          Math.random() *
+          (MAX_NUMBER - MIN_NUMBER + 1)
+        ) + MIN_NUMBER;
+
+      const ops = ['+', '-', '*', '/'];
+
+      const operation =
+        ops[Math.floor(Math.random() * ops.length)];
+
+      let answer;
+      let displayOp;
+
+      if (operation === '+') {
+
+        answer = a + b;
+        displayOp = '+';
+
+      } else if (operation === '-') {
+
+        answer = a - b;
+        displayOp = '−';
+
+      } else if (operation === '*') {
+
+        answer = a * b;
+        displayOp = '×';
+
+      } else {
+
+        answer =
+          Math.round((a / b) * 100) / 100;
+
+        displayOp = '÷';
+      }
+
+      return {
+        text: `${a} ${displayOp} ${b} = ?`,
+        answer,
+        operation
+      };
+    }
+
+
+    function checkAnswer(
+      userInput,
+      correct,
+      operation
+    ) {
+
+      const trimmed =
+        String(userInput).trim();
+
+      if (trimmed === '') {
+        return false;
+      }
+
+      try {
+
+        if (operation === '/') {
+
+          const userAnswer =
+            parseFloat(trimmed);
+
+          if (isNaN(userAnswer)) {
+            return false;
+          }
+
+          return Math.abs(
+            userAnswer - correct
+          ) < 0.01;
+
+        } else {
+
+          const userAnswer =
+            Number(trimmed);
+
+          if (
+            isNaN(userAnswer) ||
+            !Number.isInteger(userAnswer)
+          ) {
+            return userAnswer === correct;
+          }
+
+          return userAnswer === correct;
+        }
+
+      } catch {
+
+        return false;
+      }
+    }
+
+
+    // ========== UI HELPERS ==========
+
+    function showView(view) {
+
+      homeSection.classList.add('hidden');
+
+      featuresSection.classList.add('hidden');
+
+      quizScreen.classList.remove('active');
+
+      resultsScreen.classList.remove('active');
+
+
+      if (view === 'home') {
+
+        homeSection.classList.remove('hidden');
+
+        featuresSection.classList.remove('hidden');
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+      } else if (view === 'quiz') {
+
+        quizScreen.classList.add('active');
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+      } else if (view === 'results') {
+
+        resultsScreen.classList.add('active');
+
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      }
+    }
+
+
+    function updateProgress() {
+
+      const pct =
+        (currentQuestion / TOTAL_QUESTIONS) * 100;
+
+      progressFill.style.width =
+        `${pct}%`;
+
+      const bar =
+        progressFill.parentElement;
+
+      bar.setAttribute(
+        'aria-valuenow',
+        currentQuestion
+      );
+    }
+
+
+    function setFeedback(message, type) {
+
+      feedbackEl.textContent =
+        message;
+
+      feedbackEl.className =
+        'feedback show ' + type;
+    }
+
+
+    function clearFeedback() {
+
+      feedbackEl.textContent = '';
+
+      feedbackEl.className =
+        'feedback';
+    }
+
+
+    function startTimer() {
+
+      clearInterval(timerInterval);
+
+      timeLeft = TIME_LIMIT;
+
+      timerEl.textContent =
+        timeLeft;
+
+      timerEl.classList.remove('urgent');
+
+
+      timerInterval =
+        setInterval(() => {
+
+          timeLeft--;
+
+          timerEl.textContent =
+            timeLeft;
+
+          if (timeLeft <= 3) {
+            timerEl.classList.add('urgent');
+          }
+
+          if (timeLeft <= 0) {
+
+            clearInterval(timerInterval);
+
+            handleTimeout();
+          }
+
+        }, 1000);
+    }
+
+
+    function stopTimer() {
+
+      clearInterval(timerInterval);
+    }
+
+
+    // ========== QUIZ FLOW ==========
+
+    function startQuiz() {
+
+      score = 0;
+
+      currentQuestion = 0;
+
+      isWaiting = false;
+
+      scoreDisplay.textContent =
+        `Score: ${score}`;
+
+      showView('quiz');
+
+      nextQuestion();
+    }
+
+
+    function nextQuestion() {
+
+      if (
+        currentQuestion >=
+        TOTAL_QUESTIONS
+      ) {
+
+        endQuiz();
+
+        return;
+      }
+
+
+      currentQuestion++;
+
+      isWaiting = false;
+
+      clearFeedback();
+
+      answerInput.value = '';
+
+      answerInput.disabled = false;
+
+      submitBtn.disabled = false;
+
+
+      const q =
+        generateQuestion();
+
+      questionText.textContent =
+        q.text;
+
+      correctAnswer =
+        q.answer;
+
+      currentOperation =
+        q.operation;
+
+
+      questionCounter.textContent =
+        `Question ${currentQuestion} / ${TOTAL_QUESTIONS}`;
+
+      updateProgress();
+
+      startTimer();
+
+      answerInput.focus();
+    }
+
+
+    function handleSubmit(e) {
+
+      e.preventDefault();
+
+      if (isWaiting) {
+        return;
+      }
+
+
+      const raw =
+        answerInput.value.trim();
+
+
+      if (raw === '') {
+
+        setFeedback(
+          'Please enter an answer.',
+          'incorrect'
+        );
+
+        return;
+      }
+
+
+      if (isNaN(Number(raw))) {
+
+        setFeedback(
+          'Please enter a valid number.',
+          'incorrect'
+        );
+
+        return;
+      }
+
+
+      isWaiting = true;
+
+      stopTimer();
+
+      answerInput.disabled = true;
+
+      submitBtn.disabled = true;
+
+
+      const isCorrect =
+        checkAnswer(
+          raw,
+          correctAnswer,
+          currentOperation
+        );
+
+
+      if (isCorrect) {
+
+        score++;
+
+        scoreDisplay.textContent =
+          `Score: ${score}`;
+
+        setFeedback(
+          'Correct!',
+          'correct'
+        );
+
+      } else {
+
+        const niceAnswer =
+          currentOperation === '/'
+            ? Number(correctAnswer.toFixed(2))
+            : correctAnswer;
+
+        setFeedback(
+          `Incorrect. The correct answer was ${niceAnswer}.`,
+          'incorrect'
+        );
+      }
+
+
+      setTimeout(() => {
+
+        nextQuestion();
+
+      }, 1400);
+    }
+
+
+    function handleTimeout() {
+
+      if (isWaiting) {
+        return;
+      }
+
+      isWaiting = true;
+
+      answerInput.disabled = true;
+
+      submitBtn.disabled = true;
+
+
+      const niceAnswer =
+        currentOperation === '/'
+          ? Number(correctAnswer.toFixed(2))
+          : correctAnswer;
+
+
+      setFeedback(
+        `Time's up! The correct answer was ${niceAnswer}.`,
+        'timeout'
+      );
+
+
+      setTimeout(() => {
+
+        nextQuestion();
+
+      }, 1400);
+    }
+
+
+    function endQuiz() {
+
+      stopTimer();
+
+      const percentage =
+        Math.round(
+          (score / TOTAL_QUESTIONS) * 100
+        );
+
+
+      finalScoreEl.textContent =
+        `${score} / ${TOTAL_QUESTIONS}`;
+
+      finalPercentEl.textContent =
+        `${percentage}%`;
+
+
+      let msg;
+
+
+      if (score === TOTAL_QUESTIONS) {
+
+        msg =
+          'Perfect score! Excellent work.';
+
+      } else if (percentage >= 70) {
+
+        msg =
+          'Great job! Your math skills are strong.';
+
+      } else if (percentage >= 40) {
+
+        msg =
+          'Good effort! Keep practicing.';
+
+      } else {
+
+        msg =
+          'Keep practicing and try again!';
+      }
+
+
+      performanceMsg.textContent =
+        msg;
+
+
+      showView('results');
+    }
+
+
+    // ========== EVENT LISTENERS ==========
+
+    startQuizBtn.addEventListener(
+      'click',
+      startQuiz
+    );
+
+
+    playAgainBtn.addEventListener(
+      'click',
+      startQuiz
+    );
+
+
+    backHomeBtn.addEventListener(
+      'click',
+      () => showView('home')
+    );
+
+
+    logoHome.addEventListener(
+      'click',
+      (e) => {
+
+        e.preventDefault();
+
+        stopTimer();
+
+        showView('home');
+      }
+    );
+
+
+    answerForm.addEventListener(
+      'submit',
+      handleSubmit
+    );
+
+
+    // Navigation links
+
+    document
+      .querySelectorAll('[data-nav]')
+      .forEach(link => {
+
+        link.addEventListener(
+          'click',
+          (e) => {
+
+            const target =
+              link.getAttribute('data-nav');
+
+
+            if (target === 'home') {
+
+              e.preventDefault();
+
+              stopTimer();
+
+              showView('home');
+            }
+          }
+        );
+
+      });
+
+
+    // Escape returns to home during quiz
+
+    document.addEventListener(
+      'keydown',
+      (e) => {
+
+        if (
+          e.key === 'Escape' &&
+          quizScreen.classList.contains('active')
+        ) {
+
+          stopTimer();
+
+          showView('home');
+        }
+      }
+    );
+
+
+    // Initial view
+
+    showView('home');
+
+  </script>
 
 </body>
 </html>
